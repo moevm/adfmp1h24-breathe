@@ -1,3 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">breathe</string>
+    <string name="app_name">Nevsky Breathe</string>
+
+    <string-array name="exercise_name">
+        <item>Дыхание животом</item>
+        <item name="exercise_name">Коробчатое дыхание</item>
+        <item name="exercise_name_3">Дыхание 4–7–8</item>
+        <item name="exercise_name_4">Асимметричное дыхание</item>
+    </string-array>
+
+    <string-array name="exercise_desc">
+        <item>
+            Необходимо лечь на диван или на пол, положить руку на живот и
+            медленно вдыхать через нос. Живот должен надуться и подняться. Затем нужно полностью
+            вытолкнуть воздух, сокращая мышцы живота.
+        </item>
+        <item>
+            Так называемое «коробочное дыхание» или дыхание 4–4–4–4 может повысить
+            производительность и концентрацию, а также помочь справиться со стрессом.
+            Если вы замечали, что дышите в ритм песне, вы заочно знакомы с этим упражнением.
+        </item>
+        <item>
+            Выдыхайте, досчитав до четырех, затем задержите дыхание до семи, а далее выдыхате
+            до восьми. Лучше всего эти упражнения выполнять вечером, лежа в кровати.
+            Считается, что кроме всего прочего, такая гимнастика помогает быстро и крепко уснуть.
+        </item>
+        <item>
+            Основа этого типа дыхания – короткий вдох и более продолжительный выдох.
+            Попробуйте дышать так, чтобы выдох длился в 5–6 раз дольше, чем вдох.
+        </item>
+    </string-array>
+
+    <string name="select">Выбрать</string>
+    <string name="start">Начать</string>
+    <string name="stop">Стоп</string>
+    <string name="settings">Настройки</string>
+    <string name="to_main_screen">На главный экран</string>
+    <string name="phase_duration">Продолжительность фаз дыхания</string>
+    <string name="notifications">Уведомления</string>
+    <string name="profile">Ваш профиль</string>
+    <string name="achievements">Достижения</string>
+    <string name="results">Общие результаты</string>
+    <string name="technique">Техника выполнения:</string>
+    <string name="yes_breathe">Дышим</string>
+    <string name="no_breathe">Не дышим</string>
+    <string name="breath_in">Вдох</string>
+    <string name="breath_out">Выдох</string>
+    <string name="hold">Удержание</string>
+    <string name="min">мин</string>
+    <string name="sec">с</string>
 </resources>
