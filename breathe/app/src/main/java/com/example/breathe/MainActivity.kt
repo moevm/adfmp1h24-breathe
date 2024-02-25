@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
@@ -76,7 +77,10 @@ fun PracticeCard(practiceNum: Int, modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(15.dp, 10.dp, 15.dp, 5.dp)
         )
-        Button(onClick = { /*TODO*/ }) {
+        Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { /*TODO*/ }) {
             Text(
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall,
