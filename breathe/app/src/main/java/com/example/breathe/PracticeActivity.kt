@@ -11,17 +11,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,11 +67,91 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                 text = stringArrayResource(R.array.exercise_desc)[practiceNum],
                 fontSize = 18.sp,
                 lineHeight = 24.sp,
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(320.dp)
                     .padding(15.dp, 10.dp, 15.dp, 5.dp)
             )
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column (
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(
+                        modifier = Modifier.scale(2.5F),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            Icons.Outlined.KeyboardArrowUp,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier
+                        )
+                    }
+                    EditNumberField(
+                        value = "10.0"
+                    )
+                    IconButton(
+                        modifier = Modifier.scale(2.5F),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            Icons.Outlined.KeyboardArrowDown,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier
+                        )
+                    }
+                }
+                Text (
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.bodySmall,
+                    text = stringResource(R.string.min),
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                )
+                Column (
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(
+                        modifier = Modifier.scale(2.5F),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            Icons.Outlined.KeyboardArrowUp,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier
+                        )
+                    }
+                    EditNumberField(
+                        value = "10.0"
+                    )
+                    IconButton(
+                        modifier = Modifier.scale(2.5F),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            Icons.Outlined.KeyboardArrowDown,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier
+                        )
+                    }
+                }
+                Text (
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.bodySmall,
+                    text = stringResource(R.string.sec),
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                )
+            }
             StartButton()
         }
 
@@ -132,6 +219,27 @@ fun StartButton(modifier: Modifier = Modifier) {
         )
 
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditNumberField(
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    var number = value
+    OutlinedTextField(
+        value = number,
+        singleLine = true,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.outline,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+        ),
+        onValueChange = { newValue -> {number = newValue} },
+        modifier = modifier
+            .width(100.dp)
+            .padding(10.dp, 0.dp, 10.dp, 0.dp)
+    )
 }
 
 @Preview(showBackground = true)
