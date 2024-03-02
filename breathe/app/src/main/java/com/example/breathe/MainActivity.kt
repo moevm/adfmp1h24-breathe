@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Info
@@ -110,10 +112,13 @@ fun PracticeCard(practiceNum: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Header(modifier: Modifier = Modifier) {
+fun MainHeader(modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.fillMaxWidth().padding(0.dp, 10.dp, 0.dp, 0.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         IconButton(
             modifier = modifier.scale(1.6F),
@@ -154,7 +159,7 @@ fun CardsLayout(modifier: Modifier = Modifier) {
     ) {
         Column(modifier = modifier)
         {
-            Header()
+            MainHeader()
             val numbers = (0..3).toList()
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
