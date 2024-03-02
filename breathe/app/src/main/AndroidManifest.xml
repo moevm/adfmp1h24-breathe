@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PracticeActivity"
+            android:exported="true"
+            android:label="Practice"
+            android:theme="@style/Theme.Breathe"></activity>
     </application>
 
 </manifest>

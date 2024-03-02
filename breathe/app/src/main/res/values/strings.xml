@@ -31,6 +31,8 @@
         </item>
     </string-array>
 
+    <string name="arrow_back">Назад</string>
+    <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>
     <string name="start">Начать</string>
     <string name="stop">Стоп</string>
