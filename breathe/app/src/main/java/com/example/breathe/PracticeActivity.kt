@@ -19,7 +19,6 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -73,38 +72,10 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     .padding(15.dp, 10.dp, 15.dp, 5.dp)
             )
             Row (
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column (
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(
-                        modifier = Modifier.scale(2.5F),
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Icon(
-                            Icons.Outlined.KeyboardArrowUp,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier
-                        )
-                    }
-                    EditNumberField(
-                        value = "10.0"
-                    )
-                    IconButton(
-                        modifier = Modifier.scale(2.5F),
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Icon(
-                            Icons.Outlined.KeyboardArrowDown,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier
-                        )
-                    }
-                }
+                TimeFieldWithButtons("10", 80)
                 Text (
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall,
@@ -113,36 +84,7 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                 )
-                Column (
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(
-                        modifier = Modifier.scale(2.5F),
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Icon(
-                            Icons.Outlined.KeyboardArrowUp,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier
-                        )
-                    }
-                    EditNumberField(
-                        value = "10.0"
-                    )
-                    IconButton(
-                        modifier = Modifier.scale(2.5F),
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Icon(
-                            Icons.Outlined.KeyboardArrowDown,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier
-                        )
-                    }
-                }
+                TimeFieldWithButtons("10", 80)
                 Text (
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall,
@@ -151,6 +93,120 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                 )
+            }
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
+            ) {
+                Column (
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodySmall,
+                        text = stringResource(R.string.hold),
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Row (
+
+                    ) {
+                        TimeFieldWithButtons("4", 60)
+                        Text (
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.sec),
+                            fontSize = 18.sp,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                Column (
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodySmall,
+                        text = stringResource(R.string.breath_in),
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Row (
+
+                    ) {
+                        TimeFieldWithButtons("4", 60)
+                        Text (
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.sec),
+                            fontSize = 18.sp,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                Column (
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodySmall,
+                        text = stringResource(R.string.hold),
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Row (
+
+                    ) {
+                        TimeFieldWithButtons("4", 60)
+                        Text (
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.sec),
+                            fontSize = 18.sp,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                Column (
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodySmall,
+                        text = stringResource(R.string.breath_out),
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Row (
+
+                    ) {
+                        TimeFieldWithButtons("4", 60)
+                        Text (
+                            color = MaterialTheme.colorScheme.secondary,
+                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.sec),
+                            fontSize = 18.sp,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                }
             }
             StartButton()
         }
@@ -215,9 +271,48 @@ fun StartButton(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(0.dp, 10.dp, 0.dp, 0.dp)
+                .padding(0.dp, 10.dp, 0.dp, 10.dp)
         )
 
+    }
+}
+
+@Composable
+fun TimeFieldWithButtons(
+    value: String,
+    width: Int,
+    modifier: Modifier = Modifier
+) {
+    Column (
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        IconButton(
+            modifier = modifier.scale(2.5F),
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                Icons.Outlined.KeyboardArrowUp,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline,
+                modifier = modifier
+            )
+        }
+        EditNumberField(
+            value = value,
+            width = width
+        )
+        IconButton(
+            modifier = modifier.scale(2.5F),
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                Icons.Outlined.KeyboardArrowDown,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline,
+                modifier = modifier
+            )
+        }
     }
 }
 
@@ -225,6 +320,7 @@ fun StartButton(modifier: Modifier = Modifier) {
 @Composable
 fun EditNumberField(
     value: String,
+    width: Int,
     modifier: Modifier = Modifier
 ) {
     var number = value
@@ -237,7 +333,7 @@ fun EditNumberField(
         ),
         onValueChange = { newValue -> {number = newValue} },
         modifier = modifier
-            .width(100.dp)
+            .width(width.dp)
             .padding(10.dp, 0.dp, 10.dp, 0.dp)
     )
 }
