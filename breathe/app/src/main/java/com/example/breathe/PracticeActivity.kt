@@ -11,23 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,7 +73,7 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TimeFieldWithButtons("10", 80)
+                    TimeFieldWithButtons(defaultValue = 10, width = 80)
                     Text (
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodySmall,
@@ -88,7 +82,7 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                     )
-                    TimeFieldWithButtons("10", 80)
+                    TimeFieldWithButtons(defaultValue = 10, width = 80)
                     Text (
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodySmall,
@@ -103,10 +97,10 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.hold))
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.breath_in))
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.hold))
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.breath_out))
+                    TimeFieldWithTitle(4, 60, stringResource(R.string.hold))
+                    TimeFieldWithTitle(4, 60, stringResource(R.string.breath_in))
+                    TimeFieldWithTitle(4, 60, stringResource(R.string.hold))
+                    TimeFieldWithTitle(4, 60, stringResource(R.string.breath_out))
                 }
 
             }
