@@ -57,160 +57,61 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
         color = MaterialTheme.colorScheme.background
     ) {
         Column (
-            modifier = modifier
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
         ) {
-            Header(practiceNum)
-            Text(
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringArrayResource(R.array.exercise_desc)[practiceNum],
-                fontSize = 18.sp,
-                lineHeight = 24.sp,
+            Column (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(320.dp)
-                    .padding(15.dp, 10.dp, 15.dp, 5.dp)
-            )
-            Row (
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
             ) {
-                TimeFieldWithButtons("10", 80)
-                Text (
+                Header(practiceNum)
+                Text(
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(R.string.min),
+                    text = stringArrayResource(R.array.exercise_desc)[practiceNum],
                     fontSize = 18.sp,
+                    lineHeight = 24.sp,
                     modifier = Modifier
-                        .align(Alignment.CenterVertically)
+                        .fillMaxWidth()
+                        .height(370.dp)
+                        .padding(15.dp, 10.dp, 15.dp, 5.dp)
                 )
-                TimeFieldWithButtons("10", 80)
-                Text (
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(R.string.sec),
-                    fontSize = 18.sp,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                )
-            }
-            Row (
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
-            ) {
-                Column (
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+                Row (
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
+                    TimeFieldWithButtons("10", 80)
+                    Text (
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.hold),
+                        text = stringResource(R.string.min),
                         fontSize = 18.sp,
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
+                            .align(Alignment.CenterVertically)
                     )
-                    Row (
-
-                    ) {
-                        TimeFieldWithButtons("4", 60)
-                        Text (
-                            color = MaterialTheme.colorScheme.secondary,
-                            style = MaterialTheme.typography.bodySmall,
-                            text = stringResource(R.string.sec),
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
-                    }
-                }
-                Column (
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
-                ) {
-                    Text(
+                    TimeFieldWithButtons("10", 80)
+                    Text (
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.breath_in),
+                        text = stringResource(R.string.sec),
                         fontSize = 18.sp,
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
+                            .align(Alignment.CenterVertically)
                     )
-                    Row (
-
-                    ) {
-                        TimeFieldWithButtons("4", 60)
-                        Text (
-                            color = MaterialTheme.colorScheme.secondary,
-                            style = MaterialTheme.typography.bodySmall,
-                            text = stringResource(R.string.sec),
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
-                    }
                 }
-                Column (
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+                Row (
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
-                    Text(
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.hold),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Row (
-
-                    ) {
-                        TimeFieldWithButtons("4", 60)
-                        Text (
-                            color = MaterialTheme.colorScheme.secondary,
-                            style = MaterialTheme.typography.bodySmall,
-                            text = stringResource(R.string.sec),
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
-                    }
+                    TimeFieldWithTitle("4", 60, stringResource(R.string.hold))
+                    TimeFieldWithTitle("4", 60, stringResource(R.string.breath_in))
+                    TimeFieldWithTitle("4", 60, stringResource(R.string.hold))
+                    TimeFieldWithTitle("4", 60, stringResource(R.string.breath_out))
                 }
-                Column (
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
-                ) {
-                    Text(
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.breath_out),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Row (
 
-                    ) {
-                        TimeFieldWithButtons("4", 60)
-                        Text (
-                            color = MaterialTheme.colorScheme.secondary,
-                            style = MaterialTheme.typography.bodySmall,
-                            text = stringResource(R.string.sec),
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        )
-                    }
-                }
             }
             StartButton()
         }
-
     }
 }
 
@@ -274,6 +175,42 @@ fun StartButton(modifier: Modifier = Modifier) {
                 .padding(0.dp, 10.dp, 0.dp, 10.dp)
         )
 
+    }
+}
+
+@Composable
+fun TimeFieldWithTitle(
+    value: String,
+    width: Int,
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Column (
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
+    ) {
+        Text(
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.bodySmall,
+            text = title,
+            fontSize = 18.sp,
+            modifier = modifier
+                .align(Alignment.CenterHorizontally)
+        )
+        Row (
+
+        ) {
+            TimeFieldWithButtons(value, width)
+            Text (
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.bodySmall,
+                text = stringResource(R.string.sec),
+                fontSize = 18.sp,
+                modifier = modifier
+                    .align(Alignment.CenterVertically)
+            )
+        }
     }
 }
 
