@@ -102,7 +102,6 @@ fun SettingsLayout(modifier: Modifier = Modifier) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun SettingsLayoutPreview() {

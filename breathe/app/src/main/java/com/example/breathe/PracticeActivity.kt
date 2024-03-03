@@ -73,23 +73,15 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TimeFieldWithButtons(defaultValue = 10, width = 80)
-                    Text (
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.min),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                    TimeFieldWithText(
+                        defaultValue = 10,
+                        width = 80,
+                        text = stringResource(R.string.min)
                     )
-                    TimeFieldWithButtons(defaultValue = 10, width = 80)
-                    Text (
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.sec),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                    TimeFieldWithText(
+                        defaultValue = 10,
+                        width = 80,
+                        text = stringResource(R.string.sec)
                     )
                 }
                 Row (
@@ -97,10 +89,14 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
-                    TimeFieldWithTitle(4, 60, stringResource(R.string.hold))
-                    TimeFieldWithTitle(4, 60, stringResource(R.string.breath_in))
-                    TimeFieldWithTitle(4, 60, stringResource(R.string.hold))
-                    TimeFieldWithTitle(4, 60, stringResource(R.string.breath_out))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.hold), stringResource(R.string.sec))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.breath_in), stringResource(R.string.sec))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.hold), stringResource(R.string.sec))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.breath_out), stringResource(R.string.sec))
                 }
 
             }

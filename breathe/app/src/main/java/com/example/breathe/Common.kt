@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -57,9 +56,10 @@ fun EditNumberField(
 fun TimeFieldWithButtons(
     modifier: Modifier = Modifier,
     defaultValue: Int,
+    width: Int,
     maxValue: Int = 59,
     minValue: Int = 0,
-    width: Int
+    onValueChange: ((Int) -> Unit)? = null
 ) {
     var value by remember { mutableIntStateOf(defaultValue) }
     Column (
@@ -68,7 +68,14 @@ fun TimeFieldWithButtons(
     ) {
         IconButton(
             modifier = modifier.scale(2.5F),
-            onClick = { if (value < maxValue) value += 1 }
+            onClick = {
+                if (value < maxValue) {
+                    value += 1
+                    if (onValueChange != null) {
+                        onValueChange(value)
+                    }
+                }
+            }
         ) {
             Icon(
                 Icons.Outlined.KeyboardArrowUp,
@@ -80,11 +87,25 @@ fun TimeFieldWithButtons(
         EditNumberField(
             value = value,
             width = width,
-            onValueChange = { if (it in minValue..maxValue) value = it }
+            onValueChange = {
+                if (it in minValue..maxValue) {
+                    value = it
+                    if (onValueChange != null) {
+                        onValueChange(it)
+                    }
+                }
+            }
         )
         IconButton(
             modifier = modifier.scale(2.5F),
-            onClick = { if (value > minValue) value -= 1 }
+            onClick = {
+                if (value > minValue) {
+                    value -= 1
+                    if (onValueChange != null) {
+                        onValueChange(value)
+                    }
+                }
+            }
         ) {
             Icon(
                 Icons.Outlined.KeyboardArrowDown,
@@ -97,11 +118,38 @@ fun TimeFieldWithButtons(
 }
 
 @Composable
+fun TimeFieldWithText(
+    defaultValue: Int,
+    width: Int,
+    text: String,
+    modifier: Modifier = Modifier,
+    onValueChange: ((Int) -> Unit)? = null
+) {
+    Row {
+        TimeFieldWithButtons(
+            defaultValue = defaultValue,
+            width = width,
+            onValueChange = onValueChange
+        )
+        Text (
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.bodySmall,
+            text = text,
+            fontSize = 18.sp,
+            modifier = modifier
+                .align(Alignment.CenterVertically)
+        )
+    }
+}
+
+@Composable
 fun TimeFieldWithTitle(
-    value: Int,
+    defaultValue: Int,
     width: Int,
     title: String,
-    modifier: Modifier = Modifier
+    text: String,
+    modifier: Modifier = Modifier,
+    onValueChange: ((Int) -> Unit)? = null
 ) {
     Column (
         verticalArrangement = Arrangement.SpaceBetween,
@@ -116,16 +164,11 @@ fun TimeFieldWithTitle(
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
         )
-        Row {
-            TimeFieldWithButtons(defaultValue = value, width = width)
-            Text (
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.sec),
-                fontSize = 18.sp,
-                modifier = modifier
-                    .align(Alignment.CenterVertically)
-            )
-        }
+        TimeFieldWithText(
+            defaultValue = defaultValue,
+            width = width,
+            text = text,
+            onValueChange = onValueChange
+        )
     }
 }
