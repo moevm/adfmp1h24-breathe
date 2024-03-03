@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun EditNumberField(
-    modifier: Modifier = Modifier,
     value: Int,
     width: Int,
+    modifier: Modifier = Modifier,
     onValueChange: ((Int) -> Unit)? = null
 ) {
     OutlinedTextField(
@@ -54,9 +54,9 @@ fun EditNumberField(
 
 @Composable
 fun TimeFieldWithButtons(
-    modifier: Modifier = Modifier,
     defaultValue: Int,
     width: Int,
+    modifier: Modifier = Modifier,
     maxValue: Int = 59,
     minValue: Int = 0,
     onValueChange: ((Int) -> Unit)? = null
@@ -123,12 +123,16 @@ fun TimeFieldWithText(
     width: Int,
     text: String,
     modifier: Modifier = Modifier,
+    maxValue: Int = 59,
+    minValue: Int = 0,
     onValueChange: ((Int) -> Unit)? = null
 ) {
     Row {
         TimeFieldWithButtons(
             defaultValue = defaultValue,
             width = width,
+            maxValue = maxValue,
+            minValue = minValue,
             onValueChange = onValueChange
         )
         Text (
@@ -149,6 +153,8 @@ fun TimeFieldWithTitle(
     title: String,
     text: String,
     modifier: Modifier = Modifier,
+    maxValue: Int = 59,
+    minValue: Int = 0,
     onValueChange: ((Int) -> Unit)? = null
 ) {
     Column (
@@ -168,6 +174,8 @@ fun TimeFieldWithTitle(
             defaultValue = defaultValue,
             width = width,
             text = text,
+            maxValue = maxValue,
+            minValue = minValue,
             onValueChange = onValueChange
         )
     }

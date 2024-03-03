@@ -73,7 +73,7 @@ fun SettingsLayout(modifier: Modifier = Modifier) {
         Column(modifier = modifier) {
             SettingsHeader(stringResource(R.string.settings))
             Row(
-                modifier = modifier,
+                modifier = Modifier.fillMaxWidth().padding(0.dp, 0.dp, 0.dp, 50.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(
@@ -95,7 +95,29 @@ fun SettingsLayout(modifier: Modifier = Modifier) {
                         checkedTrackColor = MaterialTheme.colorScheme.secondary,
                         uncheckedThumbColor = MaterialTheme.colorScheme.primary,
                         uncheckedTrackColor = MaterialTheme.colorScheme.secondary,
-                    )
+                    ),
+                    modifier = Modifier.padding(0.dp, 0.dp, 50.dp, 0.dp)
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                TimeFieldWithText(
+                    defaultValue = 24,
+                    width = 80,
+                    text = stringResource(R.string.hrs),
+                    onValueChange = {
+                        /*TODO*/
+                    }
+                )
+                TimeFieldWithText(
+                    defaultValue = 0,
+                    width = 80,
+                    text = stringResource(R.string.min),
+                    onValueChange = {
+                        /*TODO*/
+                    }
                 )
             }
         }
