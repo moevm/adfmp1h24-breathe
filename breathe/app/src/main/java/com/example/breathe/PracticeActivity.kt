@@ -11,23 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,23 +73,15 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TimeFieldWithButtons("10", 80)
-                    Text (
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.min),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                    TimeFieldWithText(
+                        defaultValue = 10,
+                        width = 80,
+                        text = stringResource(R.string.min)
                     )
-                    TimeFieldWithButtons("10", 80)
-                    Text (
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.bodySmall,
-                        text = stringResource(R.string.sec),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                    TimeFieldWithText(
+                        defaultValue = 10,
+                        width = 80,
+                        text = stringResource(R.string.sec)
                     )
                 }
                 Row (
@@ -103,10 +89,14 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.hold))
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.breath_in))
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.hold))
-                    TimeFieldWithTitle("4", 60, stringResource(R.string.breath_out))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.hold), stringResource(R.string.sec))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.breath_in), stringResource(R.string.sec))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.hold), stringResource(R.string.sec))
+                    TimeFieldWithTitle(4, 70,
+                        stringResource(R.string.breath_out), stringResource(R.string.sec))
                 }
 
             }
@@ -176,103 +166,6 @@ fun StartButton(modifier: Modifier = Modifier) {
         )
 
     }
-}
-
-@Composable
-fun TimeFieldWithTitle(
-    value: String,
-    width: Int,
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(5.dp, 0.dp, 0.dp, 0.dp)
-    ) {
-        Text(
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.bodySmall,
-            text = title,
-            fontSize = 18.sp,
-            modifier = modifier
-                .align(Alignment.CenterHorizontally)
-        )
-        Row (
-
-        ) {
-            TimeFieldWithButtons(value, width)
-            Text (
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.bodySmall,
-                text = stringResource(R.string.sec),
-                fontSize = 18.sp,
-                modifier = modifier
-                    .align(Alignment.CenterVertically)
-            )
-        }
-    }
-}
-
-@Composable
-fun TimeFieldWithButtons(
-    value: String,
-    width: Int,
-    modifier: Modifier = Modifier
-) {
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        IconButton(
-            modifier = modifier.scale(2.5F),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                Icons.Outlined.KeyboardArrowUp,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline,
-                modifier = modifier
-            )
-        }
-        EditNumberField(
-            value = value,
-            width = width
-        )
-        IconButton(
-            modifier = modifier.scale(2.5F),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                Icons.Outlined.KeyboardArrowDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline,
-                modifier = modifier
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EditNumberField(
-    value: String,
-    width: Int,
-    modifier: Modifier = Modifier
-) {
-    var number = value
-    OutlinedTextField(
-        value = number,
-        singleLine = true,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.outline,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-        ),
-        onValueChange = { newValue -> {number = newValue} },
-        modifier = modifier
-            .width(width.dp)
-            .padding(10.dp, 0.dp, 10.dp, 0.dp)
-    )
 }
 
 @Preview(showBackground = true)

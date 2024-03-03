@@ -49,6 +49,7 @@
     <string name="breath_in">Вдох</string>
     <string name="breath_out">Выдох</string>
     <string name="hold">Удержание</string>
+    <string name="hrs">ч</string>
     <string name="min">мин</string>
     <string name="sec">с</string>
 </resources>
