@@ -98,41 +98,30 @@ fun TrainingTimer(modifier: Modifier = Modifier) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text (
-                    text = minutes.toString(),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 80.sp,
-                    modifier = Modifier
-                )
-                Spacer(modifier = Modifier.size(10.dp))
-                Text(
-                    text = stringResource(R.string.min),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 50.sp,
-                    modifier = Modifier
-                )
-            }
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text (
-                    text = seconds.toString(),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 80.sp,
-                    modifier = Modifier
-                )
-                Spacer(modifier = Modifier.size(10.dp))
-                Text(
-                    text = stringResource(R.string.sec),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 50.sp,
-                    modifier = Modifier
-                )
-            }
+            TimerDisplay(minutes, stringResource(R.string.min))
+            TimerDisplay(seconds, stringResource(R.string.sec))
         }
+    }
+}
+
+@Composable
+fun TimerDisplay(time: Int, unit: String, modifier: Modifier = Modifier) {
+    Row (
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text (
+            text = time.toString(),
+            color = MaterialTheme.colorScheme.secondary,
+            fontSize = 80.sp,
+            modifier = Modifier
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+        Text(
+            text = unit,
+            color = MaterialTheme.colorScheme.secondary,
+            fontSize = 50.sp,
+            modifier = Modifier
+        )
     }
 }
 
