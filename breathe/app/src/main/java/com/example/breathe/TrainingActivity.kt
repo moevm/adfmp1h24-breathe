@@ -33,19 +33,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
-class PracticeActivity : ComponentActivity() {
+class TrainingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             BreatheTheme {
-                PracticeLayout(2, Modifier.fillMaxSize())
+                TrainingLayout(2, Modifier.fillMaxSize())
             }
         }
     }
 }
-
 @Composable
-fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
+fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -57,96 +56,33 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
             Column (
                 modifier = Modifier
             ) {
-                PracticeHeader(practiceNum)
-                Text(
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.bodySmall,
-                    text = stringArrayResource(R.array.exercise_desc)[practiceNum],
-                    fontSize = 18.sp,
-                    lineHeight = 24.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(370.dp)
-                        .padding(15.dp, 10.dp, 15.dp, 5.dp)
-                )
-                Row (
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TimeFieldWithText(
-                        defaultValue = 10,
-                        width = 80,
-                        text = stringResource(R.string.min)
-                    )
-                    TimeFieldWithText(
-                        defaultValue = 10,
-                        width = 80,
-                        text = stringResource(R.string.sec)
-                    )
-                }
-                Row (
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
-                ) {
-                    TimeFieldWithTitle(4, 70,
-                        stringResource(R.string.hold), stringResource(R.string.sec))
-                    TimeFieldWithTitle(4, 70,
-                        stringResource(R.string.breath_in), stringResource(R.string.sec))
-                    TimeFieldWithTitle(4, 70,
-                        stringResource(R.string.hold), stringResource(R.string.sec))
-                    TimeFieldWithTitle(4, 70,
-                        stringResource(R.string.breath_out), stringResource(R.string.sec))
-                }
-
+                TrainingHeader(practiceNum)
             }
-            PracticeStartButton()
+            TrainingStopButton()
         }
     }
 }
 
 @Composable
-fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
+fun TrainingHeader(practiceNum: Int, modifier: Modifier = Modifier) {
     Row (
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxWidth()
             .padding(0.dp, 10.dp, 0.dp, 0.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        IconButton(
-            modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                Icons.Outlined.ArrowBack,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = modifier
-            )
-        }
         Text(
             text = stringArrayResource(R.array.exercise_name)[practiceNum],
             color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier.align(Alignment.CenterVertically)
         )
-        IconButton(
-            modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                Icons.Outlined.Info,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = modifier
-            )
-        }
     }
 }
 
 @Composable
-fun PracticeStartButton(modifier: Modifier = Modifier) {
+fun TrainingStopButton(modifier: Modifier = Modifier) {
     Column (
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
@@ -157,7 +93,7 @@ fun PracticeStartButton(modifier: Modifier = Modifier) {
     ) {
         Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
         Text(
-            text = stringResource(R.string.start),
+            text = stringResource(R.string.stop),
             color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier
@@ -170,8 +106,8 @@ fun PracticeStartButton(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PracticeLayoutPreview() {
+fun TrainingLayoutPreview() {
     BreatheTheme {
-        PracticeLayout(2, Modifier.fillMaxSize())
+        TrainingLayout(2, Modifier.fillMaxSize())
     }
 }
