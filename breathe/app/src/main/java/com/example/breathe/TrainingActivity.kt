@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -79,21 +80,20 @@ fun TrainingTimer(modifier: Modifier = Modifier) {
     Box (
         contentAlignment = Alignment.Center,
         modifier = Modifier
+            .height(700.dp)
+            .fillMaxWidth()
     ) {
         CircleBackground(
             integerArrayResource(R.array.background_circle_radius)[0],
-            colorResource(R.color.timer_background_light),
-            0.15F
+            colorResource(R.color.timer_background_dark)
         )
         CircleBackground(integerArrayResource(
             R.array.background_circle_radius)[1],
-            colorResource(R.color.timer_background_light),
-            0.3F
+            colorResource(R.color.timer_background_medium)
         )
         CircleBackground(integerArrayResource(
             R.array.background_circle_radius)[2],
-            colorResource(R.color.timer_background_light),
-            0.5F
+            colorResource(R.color.timer_background_light)
         )
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
@@ -112,27 +112,26 @@ fun TimerDisplay(time: Int, unit: String, modifier: Modifier = Modifier) {
         Text (
             text = time.toString(),
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 80.sp,
+            fontSize = 70.sp,
             modifier = Modifier
         )
         Spacer(modifier = Modifier.size(10.dp))
         Text(
             text = unit,
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 50.sp,
+            fontSize = 40.sp,
             modifier = Modifier
         )
     }
 }
 
 @Composable
-fun CircleBackground(radius: Int, color: Color, alpha: Float, modifier: Modifier = Modifier) {
+fun CircleBackground(radius: Int, color: Color, modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .size(radius.dp)
             .clip(CircleShape)
             .background(color)
-            .alpha(alpha)
     )
 }
 
