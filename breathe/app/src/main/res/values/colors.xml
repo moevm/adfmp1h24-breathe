@@ -3,4 +3,7 @@
     <color name="background">#FF1E2132</color>
     <color name="highlight">#FF74EDE6</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="timer_background_dark">#FF3A7975</color>
+    <color name="timer_background_medium">#FF4D9C98</color>
+    <color name="timer_background_light">#FF67CBC5</color>
 </resources>
