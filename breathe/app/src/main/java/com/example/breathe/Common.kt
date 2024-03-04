@@ -33,8 +33,10 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.ColorUtils
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.barchart.models.BarData
@@ -282,7 +284,9 @@ fun StatisticsChart(
         return
     }
     val halfExpectedHeight = 0.05f
-    val colorPaletteList = listOf( Color.Transparent, Color.Blue, Color.White, Color.Blue )
+    val blue = colorResource(R.color.timer_background_light).copy(alpha = 0.8f)
+    val white = Color.White.copy(alpha = 0.9f)
+    val colorPaletteList = listOf(Color.Transparent, blue, white, blue )
 
     val stackedBarData = mutableListOf<GroupBar>()
     for (index in values.indices) {
@@ -318,21 +322,24 @@ fun StatisticsChart(
     }
 
     val xAxisData = AxisData.Builder()
-        .axisStepSize(30.dp)
         .steps(labels.size - 1)
-        .startDrawPadding(48.dp)
+        .startDrawPadding(50.dp)
         .backgroundColor(Color.Transparent)
-        .axisLineColor(Color.White) // @todo
-        .axisLabelColor(Color.White) // @todo
+        .shouldDrawAxisLineTillEnd(true)
+        .indicatorLineWidth(0.dp)
+        .axisLineColor(blue)
+        .axisLabelFontSize(12.sp)
+        .axisLabelColor(white)
         .labelData { index -> labels[index] }
         .build()
     val yAxisData = AxisData.Builder()
         .steps(yStepsCount)
         .labelAndAxisLinePadding(20.dp)
-        .axisOffset(20.dp)
         .backgroundColor(Color.Transparent)
-        .axisLineColor(Color.White) // @todo
-        .axisLabelColor(Color.White) // @todo
+        .indicatorLineWidth(0.dp)
+        .axisLabelFontSize(12.sp)
+        .axisLineColor(blue)
+        .axisLabelColor(white)
         .labelData { index ->
             val valueList = mutableListOf<Float>()
             stackedBarData.map{ groupBar ->
@@ -351,7 +358,7 @@ fun StatisticsChart(
     val plotData = BarPlotData(
         groupBarList = stackedBarData,
         barStyle = BarStyle(
-            barWidth = 35.dp
+            barWidth = 50.dp
         ),
         barColorPaletteList = colorPaletteList
     )
