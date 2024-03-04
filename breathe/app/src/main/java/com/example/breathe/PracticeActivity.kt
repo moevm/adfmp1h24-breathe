@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.integerResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,7 +69,7 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     lineHeight = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(370.dp)
+                        .height(340.dp)
                         .padding(15.dp, 10.dp, 15.dp, 5.dp)
                 )
                 Row (
@@ -76,6 +77,12 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val defaultTime : Int = integerArrayResource(R.array.exercise_time)[practiceNum]
+                    Icon(
+                        painter = painterResource(R.drawable.clock),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp).scale(0.8F)
+                    )
                     TimeFieldWithText(
                         defaultValue = defaultTime,
                         width = 80,
@@ -159,7 +166,7 @@ fun PracticeStartButton(modifier: Modifier = Modifier) {
             .verticalScroll(rememberScrollState())
             .clickable(onClick = {})
     ) {
-        Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
+        Divider(color = MaterialTheme.colorScheme.outline, thickness = 2.dp)
         Text(
             text = stringResource(R.string.start),
             color = MaterialTheme.colorScheme.secondary,

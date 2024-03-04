@@ -17,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
@@ -33,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.integerArrayResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -83,10 +83,10 @@ fun PracticeCard(practiceNum: Int, modifier: Modifier = Modifier) {
         Row()
         {
             Icon(
-                Icons.Outlined.Info,
+                painter = painterResource(R.drawable.clock),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp)
+                modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp).scale(0.8F)
             )
             Text(
                 color = MaterialTheme.colorScheme.secondary,
@@ -98,7 +98,7 @@ fun PracticeCard(practiceNum: Int, modifier: Modifier = Modifier) {
                     .align(Alignment.CenterVertically)
             )
         }
-        Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
+        Divider(color = MaterialTheme.colorScheme.outline, thickness = 2.dp)
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = { /*TODO*/ }) {
