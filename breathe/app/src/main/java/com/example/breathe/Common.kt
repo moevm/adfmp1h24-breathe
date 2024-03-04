@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.ColorUtils
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.barchart.models.BarData
@@ -46,6 +45,7 @@ import co.yml.charts.ui.barchart.StackedBarChart
 import co.yml.charts.ui.barchart.models.BarPlotData
 import co.yml.charts.ui.barchart.models.BarStyle
 import co.yml.charts.ui.barchart.models.GroupBarChartData
+import co.yml.charts.ui.barchart.models.SelectionHighlightData
 
 @Composable
 fun EditNumberField(
@@ -334,7 +334,6 @@ fun StatisticsChart(
         .build()
     val yAxisData = AxisData.Builder()
         .steps(yStepsCount)
-        .labelAndAxisLinePadding(20.dp)
         .backgroundColor(Color.Transparent)
         .indicatorLineWidth(0.dp)
         .axisLabelFontSize(12.sp)
@@ -350,15 +349,24 @@ fun StatisticsChart(
                 valueList.add(yMax)
             }
             val maxElementInYAxis = getMaxElementInYAxis(valueList.maxOrNull() ?: 0f, yStepsCount)
-
-            (index * (maxElementInYAxis / yStepsCount)).toString()
+            String.format("%.2f", (index * (maxElementInYAxis / yStepsCount.toFloat())))
         }
         .topPadding(36.dp)
         .build()
     val plotData = BarPlotData(
         groupBarList = stackedBarData,
         barStyle = BarStyle(
-            barWidth = 50.dp
+            barWidth = 50.dp,
+            selectionHighlightData = SelectionHighlightData(
+                isHighlightFullBar = true,
+                groupBarPopUpLabel = { name, _ ->
+                    val index = name.toInt()
+                    " ${String.format("%.2f", values[index])} / ${String.format("%.2f", expected[index])} "
+                },
+                highlightTextBackgroundColor = blue,
+                highlightTextColor = white,
+                highlightBarColor = colorResource(R.color.timer_background_dark)
+            )
         ),
         barColorPaletteList = colorPaletteList
     )
@@ -380,7 +388,7 @@ fun StatisticsChart(
         backgroundColor = Color.Transparent
     )
     StackedBarChart(
-        modifier = modifier.height(400.dp),
+        modifier = modifier.height(300.dp),
         groupBarChartData = chartData
     )
 }
