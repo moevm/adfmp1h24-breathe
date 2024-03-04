@@ -57,7 +57,7 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
             Column (
                 modifier = Modifier
             ) {
-                Header(practiceNum)
+                PracticeHeader(practiceNum)
                 Text(
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall,
@@ -100,13 +100,13 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                 }
 
             }
-            StartButton()
+            PracticeStartButton()
         }
     }
 }
 
 @Composable
-fun Header(practiceNum: Int, modifier: Modifier = Modifier) {
+fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
@@ -146,7 +146,7 @@ fun Header(practiceNum: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun StartButton(modifier: Modifier = Modifier) {
+fun PracticeStartButton(modifier: Modifier = Modifier) {
     Column (
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
