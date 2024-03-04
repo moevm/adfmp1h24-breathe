@@ -100,6 +100,21 @@ fun HistoryCard(
                 }
             }
         }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            Icon(
+                Icons.Outlined.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp)
+            )
+            Text(
+                text = time[0].toString() + " мин " + time[1].toString() + " с",
+                modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp)
+            )
+        }
     }
 }
 
