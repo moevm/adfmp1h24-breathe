@@ -30,12 +30,20 @@
             Попробуйте дышать так, чтобы выдох длился в 5–6 раз дольше, чем вдох.
         </item>
     </string-array>
-
-    <string-array name="dates">
-        <item>25 февраля 2023 г</item>
-        <item>24 февраля 2023 г</item>
-        <item>23 февраля 2023 г</item>
-        <item>22 февраля 2023 г</item>
+    
+    <string-array name="months">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
     </string-array>
 
     <string name="arrow_back">Назад</string>
@@ -57,6 +65,7 @@
     <string name="breath_in">Вдох</string>
     <string name="breath_out">Выдох</string>
     <string name="hold">Удержание</string>
+    <string name="year">г</string>
     <string name="hrs">ч</string>
     <string name="min">мин</string>
     <string name="sec">с</string>

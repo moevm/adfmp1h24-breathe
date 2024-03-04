@@ -57,7 +57,7 @@ class History : ComponentActivity() {
 
 @Composable
 fun HistoryCard(
-    datesNum: Int, training: Array<Int>, time: Array<Int>, modifier: Modifier = Modifier
+    training: Array<Int>, time: Array<Int>, date: Array<Int>, modifier: Modifier = Modifier
 ) {
     OutlinedCard(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
@@ -71,7 +71,10 @@ fun HistoryCard(
             color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.titleSmall,
             textAlign = TextAlign.Left,
-            text = stringArrayResource(R.array.dates)[datesNum],
+            text = date[0].toString() + " "
+                    + stringArrayResource(R.array.months)[date[1]] + " "
+                    + date[2].toString() + " "
+                    + stringResource(R.string.year),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(30.dp)
@@ -162,6 +165,12 @@ fun HistoryLayout(modifier: Modifier = Modifier) {
         {
             HistoryHeader()
             val numbers = (0..3).toList()
+            val dates = arrayOf(
+                arrayOf(25, 1, 2023),
+                arrayOf(24, 1, 2023),
+                arrayOf(23, 1, 2023),
+                arrayOf(22, 1, 2023)
+            )
             val trainings = arrayOf(
                 arrayOf(1, 2),
                 arrayOf(0, 3),
@@ -181,9 +190,9 @@ fun HistoryLayout(modifier: Modifier = Modifier) {
             ) {
                 items(numbers.size) {
                     HistoryCard(
-                        datesNum = it,
                         training = trainings[it],
                         time = trainingTimes[it],
+                        date = dates[it],
                         modifier = modifier
                     )
                 }
