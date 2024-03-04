@@ -8,13 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.integerArrayResource
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -45,14 +49,39 @@ fun TitledImage(title: String, painter: Painter, modifier: Modifier = Modifier) 
 }
 
 @Composable
+fun TimeWithTitle(time: Int, title: String, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleSmall,
+            textAlign = TextAlign.Start,
+            text = title
+        )
+        Text(
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Start,
+            text = time.toFloat().toString() + " " + stringResource(R.string.sec)
+        )
+    }
+}
+
+@Composable
 fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = modifier) {
-            val practiceName : String = stringArrayResource(R.array.exercise_name)[practiceNum]
-            val practiceText : String = stringArrayResource(R.array.exercise_desc)[practiceNum]
+            val practiceName: String = stringArrayResource(R.array.exercise_name)[practiceNum]
+            val practiceText: String = stringArrayResource(R.array.exercise_desc)[practiceNum]
+            val practiceMinutes: Int =  integerArrayResource(R.array.exercise_time)[practiceNum]
+            val breathTime: Int = integerResource(R.integer.breathe_time)
+            val practiceTime: String = practiceMinutes.toString() + " " +
+                    stringResource(R.string.min) + " 0 " + stringResource(R.string.sec)
             val textMod : Modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp, 0.dp, 15.dp, 20.dp)
@@ -86,6 +115,37 @@ fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
                     painterResource(R.drawable.no_breathe))
                 TitledImage(stringResource(R.string.yes_breathe),
                     painterResource(R.drawable.yes_breathe))
+            }
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 20.dp, 0.dp, 20.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.clock),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier
+                        .padding(15.dp, 10.dp, 10.dp, 10.dp)
+                        .scale(0.8F)
+                )
+                Text(
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    text = practiceTime,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TimeWithTitle(breathTime, stringResource(R.string.breath_in))
+                TimeWithTitle(breathTime, stringResource(R.string.hold))
+                TimeWithTitle(breathTime, stringResource(R.string.breath_out))
+                TimeWithTitle(breathTime, stringResource(R.string.hold))
             }
         }
     }
