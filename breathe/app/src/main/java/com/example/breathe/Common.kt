@@ -3,9 +3,13 @@ package com.example.breathe
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Icon
@@ -22,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -177,6 +182,39 @@ fun TimeFieldWithTitle(
             maxValue = maxValue,
             minValue = minValue,
             onValueChange = onValueChange
+        )
+    }
+}
+
+@Composable
+fun BackHeader(title: String, modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 10.dp, 0.dp, 20.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        IconButton(
+            modifier = modifier.scale(1.6F),
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                Icons.Outlined.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = modifier
+            )
+        }
+        Text(
+            text = title,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterVertically)
+                .padding(0.dp, 0.dp, 50.dp, 0.dp)
         )
     }
 }

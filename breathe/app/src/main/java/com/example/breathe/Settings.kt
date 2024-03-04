@@ -32,46 +32,13 @@ import androidx.compose.ui.unit.dp
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun SettingsHeader(title: String, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(0.dp, 10.dp, 0.dp, 20.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        IconButton(
-            modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                Icons.Outlined.ArrowBack,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = modifier
-            )
-        }
-        Text(
-            text = title,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterVertically)
-                .padding(0.dp, 0.dp, 50.dp, 0.dp)
-        )
-    }
-}
-
-@Composable
 fun SettingsLayout(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = modifier) {
-            SettingsHeader(stringResource(R.string.settings))
+            BackHeader(stringResource(R.string.settings))
             Row(
                 modifier = Modifier.fillMaxWidth().padding(0.dp, 0.dp, 0.dp, 50.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
