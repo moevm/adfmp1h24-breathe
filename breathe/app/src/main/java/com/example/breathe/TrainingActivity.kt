@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -65,7 +63,9 @@ fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
                 TrainingHeader(practiceNum)
                 TrainingTimer()
             }
-            TrainingStopButton()
+            FooterButton(stringResource(R.string.stop), 30) {
+                /*TODO*/
+            }
         }
     }
 }
@@ -148,29 +148,6 @@ fun TrainingHeader(practiceNum: Int, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier.align(Alignment.CenterVertically)
         )
-    }
-}
-
-@Composable
-fun TrainingStopButton(modifier: Modifier = Modifier) {
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(0.dp, 10.dp, 0.dp, 0.dp)
-            .verticalScroll(rememberScrollState())
-            .clickable(onClick = {})
-    ) {
-        Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
-        Text(
-            text = stringResource(R.string.stop),
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(0.dp, 10.dp, 0.dp, 10.dp)
-        )
-
     }
 }
 

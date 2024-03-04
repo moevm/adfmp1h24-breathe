@@ -3,7 +3,6 @@ package com.example.breathe
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +15,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -111,7 +109,9 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                 }
 
             }
-            PracticeStartButton()
+            FooterButton(stringResource(R.string.start), 20) {
+                /*TODO*/
+            }
         }
     }
 }
@@ -153,29 +153,6 @@ fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
                 modifier = modifier
             )
         }
-    }
-}
-
-@Composable
-fun PracticeStartButton(modifier: Modifier = Modifier) {
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(0.dp, 10.dp, 0.dp, 0.dp)
-            .verticalScroll(rememberScrollState())
-            .clickable(onClick = {})
-    ) {
-        Divider(color = MaterialTheme.colorScheme.outline, thickness = 2.dp)
-        Text(
-            text = stringResource(R.string.start),
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(0.dp, 10.dp, 0.dp, 10.dp)
-        )
-
     }
 }
 
