@@ -67,6 +67,17 @@ fun HistoryCard(
         ),
         modifier = modifier.padding(10.dp, 30.dp, 10.dp, 0.dp)
     ) {
+        Text(
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleSmall,
+            textAlign = TextAlign.Left,
+            text = stringArrayResource(R.array.dates)[datesNum],
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(30.dp)
+                .padding(15.dp, 3.dp, 0.dp, 5.dp)
+        )
+
     }
 }
 
