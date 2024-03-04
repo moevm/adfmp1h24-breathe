@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="breathe_time">4</integer>
     <integer-array name="exercise_time">
         <item>20</item>
         <item>10</item>

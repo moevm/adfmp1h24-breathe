@@ -26,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.integerArrayResource
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -73,13 +75,14 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val defaultTime : Int = integerArrayResource(R.array.exercise_time)[practiceNum]
                     TimeFieldWithText(
-                        defaultValue = 10,
+                        defaultValue = defaultTime,
                         width = 80,
                         text = stringResource(R.string.min)
                     )
                     TimeFieldWithText(
-                        defaultValue = 10,
+                        defaultValue = 0,
                         width = 80,
                         text = stringResource(R.string.sec)
                     )
@@ -89,13 +92,14 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
-                    TimeFieldWithTitle(4, 70,
+                    val defaultTime = integerResource(R.integer.breathe_time)
+                    TimeFieldWithTitle(defaultTime, 70,
                         stringResource(R.string.hold), stringResource(R.string.sec))
-                    TimeFieldWithTitle(4, 70,
+                    TimeFieldWithTitle(defaultTime, 70,
                         stringResource(R.string.breath_in), stringResource(R.string.sec))
-                    TimeFieldWithTitle(4, 70,
+                    TimeFieldWithTitle(defaultTime, 70,
                         stringResource(R.string.hold), stringResource(R.string.sec))
-                    TimeFieldWithTitle(4, 70,
+                    TimeFieldWithTitle(defaultTime, 70,
                         stringResource(R.string.breath_out), stringResource(R.string.sec))
                 }
 
