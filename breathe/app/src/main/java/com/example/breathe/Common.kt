@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,8 +31,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import co.yml.charts.axis.AxisData
+import co.yml.charts.common.model.Point
+import co.yml.charts.ui.barchart.models.BarData
+import co.yml.charts.ui.barchart.models.GroupBar
+import co.yml.charts.common.extensions.getMaxElementInYAxis
+import co.yml.charts.ui.barchart.StackedBarChart
+import co.yml.charts.ui.barchart.models.BarPlotData
+import co.yml.charts.ui.barchart.models.BarStyle
+import co.yml.charts.ui.barchart.models.GroupBarChartData
 
 @Composable
 fun EditNumberField(
@@ -249,4 +262,118 @@ fun FooterButton(
             text = text,
         )
     }
+}
+
+@Composable
+fun StatisticsChart(
+    labels: List<String>,
+    values: List<Float>,
+    expected: List<Float>,
+    yStepsCount: Int,
+    modifier: Modifier = Modifier
+) {
+    if ( labels.size != values.size || values.size != expected.size )
+    {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(350.dp)
+        ) {}
+        return
+    }
+    val halfExpectedHeight = 0.05f
+    val colorPaletteList = listOf( Color.Transparent, Color.Blue, Color.White, Color.Blue )
+
+    val stackedBarData = mutableListOf<GroupBar>()
+    for (index in values.indices) {
+        val singleBarData = mutableListOf<BarData>()
+        if ( values[index] > expected[index] ) {
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = expected[index] - halfExpectedHeight)
+            ))
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = 0f) // skip color
+            ))
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = 2 * halfExpectedHeight)
+            ))
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = values[index] - expected[index] - halfExpectedHeight)
+            ))
+        } else {
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = values[index] - halfExpectedHeight)
+            ))
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = expected[index] - values[index] - halfExpectedHeight)
+            ))
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = 2 * halfExpectedHeight)
+            ))
+            singleBarData.add(BarData(
+                point = Point(x = index.toFloat(), y = 0f) // skip color
+            ))
+        }
+        stackedBarData.add(GroupBar(index.toString(), singleBarData))
+    }
+
+    val xAxisData = AxisData.Builder()
+        .axisStepSize(30.dp)
+        .steps(labels.size - 1)
+        .startDrawPadding(48.dp)
+        .backgroundColor(Color.Transparent)
+        .axisLineColor(Color.White) // @todo
+        .axisLabelColor(Color.White) // @todo
+        .labelData { index -> labels[index] }
+        .build()
+    val yAxisData = AxisData.Builder()
+        .steps(yStepsCount)
+        .labelAndAxisLinePadding(20.dp)
+        .axisOffset(20.dp)
+        .backgroundColor(Color.Transparent)
+        .axisLineColor(Color.White) // @todo
+        .axisLabelColor(Color.White) // @todo
+        .labelData { index ->
+            val valueList = mutableListOf<Float>()
+            stackedBarData.map{ groupBar ->
+                var yMax = 0f
+                groupBar.barList.forEach{
+                    yMax += it.point.y
+                }
+                valueList.add(yMax)
+            }
+            val maxElementInYAxis = getMaxElementInYAxis(valueList.maxOrNull() ?: 0f, yStepsCount)
+
+            (index * (maxElementInYAxis / yStepsCount)).toString()
+        }
+        .topPadding(36.dp)
+        .build()
+    val plotData = BarPlotData(
+        groupBarList = stackedBarData,
+        barStyle = BarStyle(
+            barWidth = 35.dp
+        ),
+        barColorPaletteList = colorPaletteList
+    )
+    val chartData = GroupBarChartData(
+        barPlotData = plotData,
+        xAxisData = xAxisData,
+        yAxisData = yAxisData,
+        drawBar = { drawScope, _, barStyle, drawOffset, height, barIndex ->
+            with(drawScope) {
+                drawRect(
+                    color = colorPaletteList[barIndex],
+                    topLeft = drawOffset,
+                    size = Size(barStyle.barWidth.toPx(), height),
+                    style = barStyle.barDrawStyle,
+                    blendMode = barStyle.barBlendMode
+                )
+            }
+        },
+        backgroundColor = Color.Transparent
+    )
+    StackedBarChart(
+        modifier = modifier.height(400.dp),
+        groupBarChartData = chartData
+    )
 }
