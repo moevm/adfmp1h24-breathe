@@ -7,6 +7,7 @@
         <item>15</item>
         <item>20</item>
     </integer-array>
+
     <integer-array name="background_circle_radius">
         <item>350</item>
         <item>300</item>

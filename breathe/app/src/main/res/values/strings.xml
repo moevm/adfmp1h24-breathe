@@ -31,6 +31,13 @@
         </item>
     </string-array>
 
+    <string-array name="dates">
+        <item>25 февраля 2023 г</item>
+        <item>24 февраля 2023 г</item>
+        <item>23 февраля 2023 г</item>
+        <item>22 февраля 2023 г</item>
+    </string-array>
+
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>
