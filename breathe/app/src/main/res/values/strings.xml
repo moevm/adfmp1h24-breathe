@@ -55,6 +55,13 @@
 
     <string name="warning">Осторожно: присутствует опасность асфиксии</string>
 
+    <string-array name="chart_labels">
+        <item>Вдох</item>
+        <item>Удержание</item>
+        <item>Выдох</item>
+        <item>Удержание</item>
+    </string-array>
+
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>
