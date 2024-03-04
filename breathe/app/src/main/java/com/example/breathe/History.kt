@@ -77,7 +77,29 @@ fun HistoryCard(
                 .height(30.dp)
                 .padding(15.dp, 3.dp, 0.dp, 5.dp)
         )
+        LazyColumn (
+            verticalArrangement = Arrangement.Top,
+            userScrollEnabled = true,
+            modifier = modifier
+                .height(60.dp)
+                .padding(15.dp, 10.dp, 15.dp, 5.dp)
+        ) {
+            items(training.size) {
+                Row (
 
+                ) {
+                    Icon(
+                        Icons.Outlined.Star,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.scale(0.5F)
+                    )
+                    Text(
+                        text = stringArrayResource(R.array.exercise_name)[training[it]]
+                    )
+                }
+            }
+        }
     }
 }
 
