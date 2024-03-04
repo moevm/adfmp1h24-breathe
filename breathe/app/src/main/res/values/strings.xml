@@ -30,6 +30,21 @@
             Попробуйте дышать так, чтобы выдох длился в 5–6 раз дольше, чем вдох.
         </item>
     </string-array>
+    
+    <string-array name="months">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </string-array>
 
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
@@ -40,6 +55,7 @@
     <string name="to_main_screen">На главный экран</string>
     <string name="phase_duration">Продолжительность фаз дыхания</string>
     <string name="notifications">Уведомления</string>
+    <string name="history">История</string>
     <string name="profile">Ваш профиль</string>
     <string name="achievements">Достижения</string>
     <string name="results">Общие результаты</string>
@@ -49,6 +65,7 @@
     <string name="breath_in">Вдох</string>
     <string name="breath_out">Выдох</string>
     <string name="hold">Удержание</string>
+    <string name="year">г</string>
     <string name="hrs">ч</string>
     <string name="min">мин</string>
     <string name="sec">с</string>
