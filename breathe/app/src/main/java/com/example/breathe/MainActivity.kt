@@ -18,9 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -98,15 +96,8 @@ fun PracticeCard(practiceNum: Int, modifier: Modifier = Modifier) {
                     .align(Alignment.CenterVertically)
             )
         }
-        Divider(color = MaterialTheme.colorScheme.outline, thickness = 2.dp)
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { /*TODO*/ }) {
-            Text(
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleSmall,
-                text = stringResource(R.string.select),
-            )
+        FooterButton(stringResource(R.string.select)) {
+            /*TODO*/
         }
     }
 }

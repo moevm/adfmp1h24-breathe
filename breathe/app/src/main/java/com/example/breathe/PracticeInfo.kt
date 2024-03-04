@@ -117,10 +117,10 @@ fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
                     painterResource(R.drawable.yes_breathe))
             }
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(0.dp, 20.dp, 0.dp, 20.dp)
+                    .padding(15.dp, 20.dp, 0.dp, 20.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.clock),
@@ -147,6 +147,7 @@ fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
                 TimeWithTitle(breathTime, stringResource(R.string.breath_out))
                 TimeWithTitle(breathTime, stringResource(R.string.hold))
             }
+            FooterButton(stringResource(R.string.start), 110)
         }
     }
 }

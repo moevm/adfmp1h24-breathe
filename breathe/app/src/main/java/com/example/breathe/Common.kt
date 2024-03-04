@@ -12,6 +12,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -215,6 +218,32 @@ fun BackHeader(title: String, modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .align(Alignment.CenterVertically)
                 .padding(0.dp, 0.dp, 50.dp, 0.dp)
+        )
+    }
+}
+
+@Composable
+fun FooterButton(
+    text: String,
+    offset: Int = 0,
+    onClick: (()->Unit)? = null
+) {
+    Divider(
+        color = MaterialTheme.colorScheme.outline,
+        thickness = 2.dp,
+        modifier = Modifier.padding(0.dp, offset.dp, 0.dp, 0.dp)
+    )
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {
+            if (onClick != null) {
+                onClick()
+            }
+        }) {
+        Text(
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleSmall,
+            text = text,
         )
     }
 }
