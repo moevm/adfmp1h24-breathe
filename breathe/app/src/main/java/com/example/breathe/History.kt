@@ -101,7 +101,9 @@ fun HistoryCard(
             }
         }
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
         )
         {
             Icon(
