@@ -24,12 +24,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -74,12 +72,12 @@ fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
 
 @Composable
 fun TrainingTimer(modifier: Modifier = Modifier) {
-    var minutes by remember { mutableStateOf(0) }
-    var seconds by remember { mutableStateOf(0) }
+    val minutes by remember { mutableIntStateOf(0) }
+    val seconds by remember { mutableIntStateOf(0) }
 
     Box (
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
             .height(700.dp)
             .fillMaxWidth()
     ) {
@@ -113,14 +111,14 @@ fun TimerDisplay(time: Int, unit: String, modifier: Modifier = Modifier) {
             text = time.toString(),
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 70.sp,
-            modifier = Modifier
+            modifier = modifier
         )
-        Spacer(modifier = Modifier.size(10.dp))
+        Spacer(modifier = modifier.size(10.dp))
         Text(
             text = unit,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 40.sp,
-            modifier = Modifier
+            modifier = modifier
         )
     }
 }
@@ -128,7 +126,7 @@ fun TimerDisplay(time: Int, unit: String, modifier: Modifier = Modifier) {
 @Composable
 fun CircleBackground(radius: Int, color: Color, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(radius.dp)
             .clip(CircleShape)
             .background(color)
