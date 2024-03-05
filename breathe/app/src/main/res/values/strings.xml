@@ -46,6 +46,8 @@
         <item>декабря</item>
     </string-array>
 
+    <string name="warning">Осторожно: присутствует опасность асфиксии</string>
+
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>

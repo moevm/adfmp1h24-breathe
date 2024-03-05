@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,18 +17,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -67,19 +63,21 @@ fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
                 TrainingHeader(practiceNum)
                 TrainingTimer()
             }
-            TrainingStopButton()
+            FooterButton(stringResource(R.string.stop), 30) {
+                /*TODO*/
+            }
         }
     }
 }
 
 @Composable
 fun TrainingTimer(modifier: Modifier = Modifier) {
-    var minutes by remember { mutableStateOf(0) }
-    var seconds by remember { mutableStateOf(0) }
+    val minutes by remember { mutableIntStateOf(0) }
+    val seconds by remember { mutableIntStateOf(0) }
 
     Box (
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
             .height(700.dp)
             .fillMaxWidth()
     ) {
@@ -113,14 +111,14 @@ fun TimerDisplay(time: Int, unit: String, modifier: Modifier = Modifier) {
             text = time.toString(),
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 70.sp,
-            modifier = Modifier
+            modifier = modifier
         )
-        Spacer(modifier = Modifier.size(10.dp))
+        Spacer(modifier = modifier.size(10.dp))
         Text(
             text = unit,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 40.sp,
-            modifier = Modifier
+            modifier = modifier
         )
     }
 }
@@ -128,7 +126,7 @@ fun TimerDisplay(time: Int, unit: String, modifier: Modifier = Modifier) {
 @Composable
 fun CircleBackground(radius: Int, color: Color, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(radius.dp)
             .clip(CircleShape)
             .background(color)
@@ -150,29 +148,6 @@ fun TrainingHeader(practiceNum: Int, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier.align(Alignment.CenterVertically)
         )
-    }
-}
-
-@Composable
-fun TrainingStopButton(modifier: Modifier = Modifier) {
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(0.dp, 10.dp, 0.dp, 0.dp)
-            .verticalScroll(rememberScrollState())
-            .clickable(onClick = {})
-    ) {
-        Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
-        Text(
-            text = stringResource(R.string.stop),
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(0.dp, 10.dp, 0.dp, 10.dp)
-        )
-
     }
 }
 
