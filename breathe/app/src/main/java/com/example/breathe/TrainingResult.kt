@@ -13,9 +13,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun TrainingResult(
+fun TrainingResultLayout(
     practiceNum: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainScreenButton: (() -> Unit)? = null
 ) {
     Surface(
         modifier = Modifier,
@@ -40,7 +41,9 @@ fun TrainingResult(
                 )
             }
             FooterButton(stringResource(R.string.to_main_screen)) {
-                /*TODO*/
+                if (mainScreenButton != null) {
+                    mainScreenButton()
+                }
             }
         }
     }
@@ -50,6 +53,6 @@ fun TrainingResult(
 @Composable
 fun TrainingResultPreview() {
     BreatheTheme {
-        TrainingResult(1, modifier = Modifier.fillMaxSize())
+        TrainingResultLayout(1, modifier = Modifier.fillMaxSize())
     }
 }

@@ -1,11 +1,13 @@
 package com.example.breathe
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -27,16 +29,22 @@ import com.example.breathe.ui.theme.BreatheTheme
 @Composable
 fun SettingsLayout(
     modifier: Modifier = Modifier,
+    aboutButton: (()->Unit)? = null,
     upButton: (()->Unit)? = null
 ) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(modifier = modifier) {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             BackHeader(title = stringResource(R.string.settings), upButton = upButton)
             Row(
-                modifier = Modifier.fillMaxWidth().padding(0.dp, 0.dp, 0.dp, 50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 0.dp, 0.dp, 50.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(
@@ -81,6 +89,18 @@ fun SettingsLayout(
                     onValueChange = {
                         /*TODO*/
                     }
+                )
+            }
+            Button(
+                onClick = { if (aboutButton != null) aboutButton() },
+                modifier = Modifier.padding(50.dp, 120.dp, 50.dp, 0.dp),
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)
+            ) {
+                Text(
+                    text = stringResource(R.string.about),
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Center
                 )
             }
         }

@@ -17,7 +17,7 @@ enum class BreatheScreen {
     PracticesList,
     Practice,
     Training,
-    Result,
+    TrainingResult,
     Settings,
     Profile,
     History,
@@ -58,7 +58,9 @@ fun BreatheApp() {
                     infoButton = { num -> navController.navigate(
                         BreatheScreen.PracticeInfo.name + "/$num") },
                     startButton = { num ->
-                        navController.navigate(BreatheScreen.Training.name + "/$num") },
+                        navController.navigate(BreatheScreen.Training.name + "/$num") {
+                            popUpTo(BreatheScreen.PracticesList.name)
+                        } },
                     upButton = { navController.navigateUp() }
                 )
             }
@@ -68,17 +70,39 @@ fun BreatheApp() {
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 TrainingLayout(
                     practiceNum = it,
-                    stopButton = { navController.navigate(BreatheScreen.Result.name) })
+                    stopButton = { num ->
+                        navController.navigate(BreatheScreen.TrainingResult.name + "/$num") {
+                            popUpTo(BreatheScreen.PracticesList.name)
+                        }
+                    }
+                )
             }
         }
-        composable(BreatheScreen.Result.name) {
-            SettingsLayout(upButton = { navController.navigateUp() })
+        composable(
+            BreatheScreen.TrainingResult.name + practiceNumUrl,
+            arguments = arguments
+        ) {
+            backStackEntry ->
+            backStackEntry.arguments?.getInt(practiceNumArg)?.let {
+                TrainingResultLayout(
+                    practiceNum = it,
+                    mainScreenButton = { navController.navigate(BreatheScreen.PracticesList.name) {
+                        popUpTo(BreatheScreen.PracticesList.name)
+                    } }
+                )
+            }
         }
         composable(BreatheScreen.Settings.name) {
-            SettingsLayout(upButton = { navController.navigateUp() })
+            SettingsLayout(
+                aboutButton = { navController.navigate(BreatheScreen.About.name) },
+                upButton = { navController.navigateUp() }
+            )
         }
         composable(BreatheScreen.Profile.name) {
-            SettingsLayout(upButton = { navController.navigateUp() })
+            ProfileLayout(
+                historyButton = { navController.navigate(BreatheScreen.History.name) },
+                upButton = { navController.navigateUp() }
+            )
         }
         composable(BreatheScreen.History.name) {
             HistoryLayout(upButton = { navController.navigateUp() })
@@ -95,7 +119,7 @@ fun BreatheApp() {
             }
         }
         composable(BreatheScreen.About.name) {
-            SettingsLayout(upButton = { navController.navigateUp() })
+            AboutLayout(upButton = { navController.navigateUp() })
         }
     }
 }

@@ -38,7 +38,7 @@ import com.example.breathe.ui.theme.BreatheTheme
 fun TrainingLayout(
     practiceNum: Int,
     modifier: Modifier = Modifier,
-    stopButton: (()->Unit)? = null
+    stopButton: ((Int)->Unit)? = null
 ) {
     Surface(
         modifier = modifier,
@@ -55,7 +55,11 @@ fun TrainingLayout(
                 TrainingHeader(practiceNum)
                 TrainingTimer()
             }
-            FooterButton(text = stringResource(R.string.stop), offset = 30, onClick = stopButton)
+            FooterButton(text = stringResource(R.string.stop), offset = 30) {
+                if (stopButton != null) {
+                    stopButton(practiceNum)
+                }
+            }
         }
     }
 }

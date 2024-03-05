@@ -2,8 +2,6 @@ package com.example.breathe
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -14,7 +12,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun ProfileLayout(modifier: Modifier = Modifier) {
+fun ProfileLayout(
+    modifier: Modifier = Modifier,
+    historyButton: (()->Unit)? = null,
+    upButton: (()->Unit)? = null
+) {
     Surface(
         modifier = Modifier,
         color = MaterialTheme.colorScheme.background
@@ -29,8 +31,8 @@ fun ProfileLayout(modifier: Modifier = Modifier) {
         ) {
             BackHeaderWithButton(
                 stringResource(R.string.profile_title),
-                upButton = { /* TODO */ },
-                secondButton = { /* TODO */ }
+                upButton = upButton,
+                secondButton = historyButton
             )
             ProgressBarWithText(
                 0.7f,
