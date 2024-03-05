@@ -2,6 +2,8 @@ package com.example.breathe
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -25,6 +27,10 @@ fun ProfileLayout(modifier: Modifier = Modifier) {
         Column(
             modifier = modifier
         ) {
+            BackHeaderWithButton(
+                stringResource(R.string.profile_title),
+                { /* TODO */ }
+            )
             ProgressBarWithText(
                 0.7f,
                 0.toString(),

@@ -81,6 +81,8 @@
     <string name="achievements_title">Достижения</string>
     <string name="level_header">Уровень %d</string>
 
+    <string name="profile_title">Ваш профиль</string>
+
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>

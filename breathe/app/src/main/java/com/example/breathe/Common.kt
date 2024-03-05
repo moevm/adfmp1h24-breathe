@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
@@ -589,3 +590,50 @@ fun ProgressBarWithText(
         }
     }
 }
+
+
+@Composable
+fun BackHeaderWithButton(
+    title: String,
+    buttonCallback: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        IconButton(
+            modifier = modifier.scale(1.6F),
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                Icons.Outlined.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = modifier
+            )
+        }
+        Text(
+            text = title,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = modifier
+                .align(Alignment.CenterVertically)
+        )
+        IconButton(
+            modifier = modifier.scale(1.6F),
+            onClick = buttonCallback
+        ) {
+            Icon(
+                Icons.Outlined.DateRange,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = modifier
+            )
+        }
+    }
+}
+
