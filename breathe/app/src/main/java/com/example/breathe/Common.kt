@@ -1,5 +1,6 @@
 package com.example.breathe
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,10 +19,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
@@ -31,6 +32,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -48,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.yml.charts.axis.AxisData
@@ -345,6 +348,7 @@ fun StatisticsChart(
         .axisLineColor(blue)
         .axisLabelFontSize(12.sp)
         .axisLabelColor(white)
+        .axisLineThickness(4.dp)
         .labelData { index -> labels[index] }
         .build()
     val yAxisData = AxisData.Builder()
@@ -354,6 +358,7 @@ fun StatisticsChart(
         .axisLabelFontSize(12.sp)
         .axisLineColor(blue)
         .axisLabelColor(white)
+        .axisLineThickness(4.dp)
         .labelData { index ->
             val valueList = mutableListOf<Float>()
             stackedBarData.map{ groupBar ->
@@ -447,7 +452,7 @@ fun AchievementWithText(
             .clip(CircleShape)
             .background(Color.Transparent)
             .border(
-                width = 2.dp,
+                width = 3.dp,
                 color = tint,
                 shape = CircleShape
             )
@@ -455,7 +460,8 @@ fun AchievementWithText(
         Text(
             text = text,
             color = tint,
-            fontSize = 18.sp,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxSize()
@@ -527,6 +533,59 @@ fun AchievementsCard(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ProgressBarWithText(
+    progress: Float,
+    startText: String,
+    endText: String,
+    modifier: Modifier = Modifier,
+    headerText: String = ""
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        if (headerText.isNotEmpty()) {
+            Text(
+                text = headerText,
+                color = Color.White,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+        LinearProgressIndicator(
+            progress = progress,
+            color = Color.White,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(15.dp)
+                .border(
+                    width = 3.dp,
+                    color = colorResource(R.color.timer_background_light),
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .clip(RoundedCornerShape(6.dp)),
+            trackColor = Color.Transparent
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp)
+        ) {
+            Text(
+                color = Color.White,
+                text = startText
+            )
+            Text(
+                color = Color.White,
+                text = endText
+            )
         }
     }
 }

@@ -20,14 +20,21 @@ fun ProfileLayout(modifier: Modifier = Modifier) {
         val chartLabels: List<String> = stringArrayResource(R.array.chart_labels).asList()
         val values = listOf(3.0f, 4.0f, 6.0f, 8.0f)
         val expected = listOf(4.0f, 4.0f, 4.0f, 4.0f)
+        val level = 17
 
         Column(
             modifier = modifier
         ) {
+            ProgressBarWithText(
+                0.7f,
+                0.toString(),
+                450.toString(),
+                headerText = stringResource(R.string.level_header, level)
+            )
             AchievementsCard(
-                listOf("a1", "a2", "a3", "a4", "a5"),
-                listOf("a6", "a7", "a8", "a9"),
-                headerText = "Достижения"
+                stringArrayResource(R.array.achievements_active).asList(),
+                stringArrayResource(R.array.achievements_inactive).asList(),
+                headerText = stringResource(R.string.achievements_title)
             )
             StatisticsChart(
                 chartLabels,

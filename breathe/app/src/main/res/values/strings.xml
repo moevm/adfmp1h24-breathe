@@ -65,6 +65,22 @@
     <string name="total_results_header">Общие результаты</string>
     <string name="training_results_header">Продолжительность фаз дыхания</string>
 
+    <string-array name="achievements_active">
+        <item>1</item>
+        <item>7</item>
+        <item>14</item>
+    </string-array>
+
+    <string-array name="achievements_inactive">
+        <item>21</item>
+        <item>30</item>
+        <item>6м</item>
+        <item>Год</item>
+    </string-array>
+
+    <string name="achievements_title">Достижения</string>
+    <string name="level_header">Уровень %d</string>
+
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>
