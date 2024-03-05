@@ -36,7 +36,7 @@ fun PracticeLayout(
     practiceNum: Int,
     modifier: Modifier = Modifier,
     infoButton: ((Int)->Unit)? = null,
-    startButton: (()->Unit)? = null,
+    startButton: ((Int)->Unit)? = null,
     upButton: (()->Unit)? = null
 ) {
     Surface(
@@ -105,7 +105,11 @@ fun PracticeLayout(
                 }
 
             }
-            FooterButton(text = stringResource(R.string.start), offset = 20, onClick = startButton)
+            FooterButton(text = stringResource(R.string.start), offset = 20) {
+                if (startButton != null) {
+                    startButton(practiceNum)
+                }
+            }
         }
     }
 }

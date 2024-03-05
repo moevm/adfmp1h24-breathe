@@ -6,9 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.breathe.ui.theme.BreatheTheme
 
 enum class BreatheScreen {
@@ -25,48 +27,75 @@ enum class BreatheScreen {
 
 @Composable
 fun BreatheApp() {
+    val navController = rememberNavController()
     NavHost(
-        navController = rememberNavController(),
+        navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
         modifier = Modifier.fillMaxSize()
     ) {
         val practiceNumArg = "practiceNum"
         val practiceNumUrl = "/{$practiceNumArg}"
+        val arguments = listOf(
+            navArgument(practiceNumArg) {
+                type = NavType.IntType
+                nullable = false
+            }
+        )
+
         composable(BreatheScreen.PracticesList.name) {
-            PracticesListLayout()
+            PracticesListLayout(
+                settingsButton = { navController.navigate(BreatheScreen.Settings.name) },
+                profileButton = { navController.navigate(BreatheScreen.Profile.name) },
+                practiceButton = { num ->
+                    navController.navigate(BreatheScreen.Practice.name + "/$num") }
+            )
         }
-        composable(BreatheScreen.Practice.name + practiceNumUrl) {
+        composable(BreatheScreen.Practice.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
-                PracticeLayout(it)
+                PracticeLayout(
+                    practiceNum = it,
+                    infoButton = { num -> navController.navigate(
+                        BreatheScreen.PracticeInfo.name + "/$num") },
+                    startButton = { num ->
+                        navController.navigate(BreatheScreen.Training.name + "/$num") },
+                    upButton = { navController.navigateUp() }
+                )
             }
         }
-        composable(BreatheScreen.Training.name + practiceNumUrl) {
+        composable(BreatheScreen.Training.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
-                TrainingLayout(it)
+                TrainingLayout(
+                    practiceNum = it,
+                    stopButton = { navController.navigate(BreatheScreen.Result.name) })
             }
         }
         composable(BreatheScreen.Result.name) {
-            PracticesListLayout()
+            SettingsLayout(upButton = { navController.navigateUp() })
         }
         composable(BreatheScreen.Settings.name) {
-            SettingsLayout()
+            SettingsLayout(upButton = { navController.navigateUp() })
         }
         composable(BreatheScreen.Profile.name) {
-            PracticesListLayout()
+            SettingsLayout(upButton = { navController.navigateUp() })
         }
         composable(BreatheScreen.History.name) {
-            HistoryLayout()
+            HistoryLayout(upButton = { navController.navigateUp() })
         }
-        composable(BreatheScreen.PracticeInfo.name + practiceNumUrl) {
+        composable(BreatheScreen.PracticeInfo.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
-                PracticeInfoLayout(it)
+                PracticeInfoLayout(
+                    practiceNum = it,
+                    startButton = { num ->
+                        navController.navigate(BreatheScreen.Training.name + "/$num") },
+                    upButton = { navController.navigateUp() }
+                )
             }
         }
         composable(BreatheScreen.About.name) {
-            PracticesListLayout()
+            SettingsLayout(upButton = { navController.navigateUp() })
         }
     }
 }
