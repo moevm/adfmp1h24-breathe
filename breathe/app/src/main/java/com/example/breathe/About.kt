@@ -109,3 +109,4 @@ fun AboutLayoutPreview() {
         AboutLayout(Modifier.fillMaxSize())
     }
 }
+
