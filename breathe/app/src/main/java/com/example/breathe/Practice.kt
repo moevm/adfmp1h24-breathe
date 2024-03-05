@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
+fun PracticeLayout(practiceNum: Int, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
