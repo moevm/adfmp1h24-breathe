@@ -80,7 +80,10 @@ fun PracticeInfoLayout(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(modifier = modifier) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+        ) {
             val practiceName: String = stringArrayResource(R.array.exercise_name)[practiceNum]
             val practiceText: String = stringArrayResource(R.array.exercise_desc)[practiceNum]
             val practiceMinutes: Int =  integerArrayResource(R.array.exercise_time)[practiceNum]
@@ -91,68 +94,70 @@ fun PracticeInfoLayout(
                 .fillMaxWidth()
                 .padding(15.dp, 0.dp, 15.dp, 20.dp)
             BackHeader(title = practiceName, upButton = upButton)
-            Text(
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleSmall,
-                textAlign = TextAlign.Start,
-                text = stringResource(R.string.technique),
-                modifier = textMod
-            )
-            Text(
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Justify,
-                text = practiceText,
-                modifier = textMod
-            )
-            Text(
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Start,
-                text = stringResource(R.string.warning),
-                modifier = textMod
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TitledImage(stringResource(R.string.no_breathe),
-                    painterResource(R.drawable.no_breathe))
-                TitledImage(stringResource(R.string.yes_breathe),
-                    painterResource(R.drawable.yes_breathe))
-            }
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp, 20.dp, 0.dp, 20.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.clock),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier
-                        .padding(15.dp, 10.dp, 10.dp, 10.dp)
-                        .scale(0.8F)
+            Column (modifier = modifier){
+                Text(
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Start,
+                    text = stringResource(R.string.technique),
+                    modifier = textMod
                 )
                 Text(
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                    text = practiceTime,
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    textAlign = TextAlign.Justify,
+                    text = practiceText,
+                    modifier = textMod
                 )
+                Text(
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Start,
+                    text = stringResource(R.string.warning),
+                    modifier = textMod
+                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TitledImage(stringResource(R.string.no_breathe),
+                        painterResource(R.drawable.no_breathe))
+                    TitledImage(stringResource(R.string.yes_breathe),
+                        painterResource(R.drawable.yes_breathe))
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp, 20.dp, 0.dp, 20.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.clock),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier
+                            .padding(15.dp, 10.dp, 10.dp, 10.dp)
+                            .scale(0.8F)
+                    )
+                    Text(
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        text = practiceTime,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TimeWithTitle(breathTime, stringResource(R.string.breath_in))
+                    TimeWithTitle(breathTime, stringResource(R.string.hold))
+                    TimeWithTitle(breathTime, stringResource(R.string.breath_out))
+                    TimeWithTitle(breathTime, stringResource(R.string.hold))
+                }
             }
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TimeWithTitle(breathTime, stringResource(R.string.breath_in))
-                TimeWithTitle(breathTime, stringResource(R.string.hold))
-                TimeWithTitle(breathTime, stringResource(R.string.breath_out))
-                TimeWithTitle(breathTime, stringResource(R.string.hold))
-            }
-            FooterButton(text = stringResource(R.string.start), offset = 110) {
+            FooterButton(text = stringResource(R.string.start), offset = 0) {
                 if (startButton != null) {
                     startButton(practiceNum)
                 }
