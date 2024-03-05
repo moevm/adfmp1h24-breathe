@@ -63,7 +63,7 @@ fun PracticeLayout(
                     lineHeight = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(340.dp)
+                        .height(300.dp)
                         .padding(15.dp, 10.dp, 15.dp, 5.dp)
                 )
                 Row (
@@ -105,7 +105,7 @@ fun PracticeLayout(
                 }
 
             }
-            FooterButton(text = stringResource(R.string.start), offset = 20) {
+            FooterButton(text = stringResource(R.string.start), offset = 0) {
                 if (startButton != null) {
                     startButton(practiceNum)
                 }
