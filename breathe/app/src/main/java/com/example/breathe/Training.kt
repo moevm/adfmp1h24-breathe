@@ -1,8 +1,5 @@
 package com.example.breathe
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,16 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
-class TrainingActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BreatheTheme {
-                TrainingLayout(2, Modifier.fillMaxSize())
-            }
-        }
-    }
-}
 @Composable
 fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
     Surface(
