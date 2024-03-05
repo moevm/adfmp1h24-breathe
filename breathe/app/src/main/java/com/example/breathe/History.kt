@@ -1,8 +1,5 @@
 package com.example.breathe
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,20 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.breathe.ui.theme.BreatheTheme
 
-class History : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BreatheTheme {
-                HistoryLayout(Modifier.fillMaxSize())
-            }
-        }
-    }
-}
-
 @Composable
 fun HistoryCard(
-    training: Array<Int>, time: Array<Int>, date: Array<Int>, modifier: Modifier = Modifier
+    training: Array<Int>,
+    time: Array<Int>,
+    date: Array<Int>,
+    modifier: Modifier = Modifier
 ) {
     OutlinedCard(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
@@ -110,14 +99,17 @@ fun HistoryCard(
 }
 
 @Composable
-fun HistoryLayout(modifier: Modifier = Modifier) {
+fun HistoryLayout(
+    modifier: Modifier = Modifier,
+    upButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = modifier)
         {
-            BackHeader(stringResource(R.string.history))
+            BackHeader(title = stringResource(R.string.history), upButton = upButton)
             val numbers = (0..3).toList()
             val dates = arrayOf(
                 arrayOf(25, 1, 2023),

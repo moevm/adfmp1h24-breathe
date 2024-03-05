@@ -189,7 +189,11 @@ fun TimeFieldWithTitle(
 }
 
 @Composable
-fun BackHeader(title: String, modifier: Modifier = Modifier) {
+fun BackHeader(
+    title: String,
+    modifier: Modifier = Modifier,
+    upButton: (()->Unit)? = null
+) {
     Row(
         horizontalArrangement = Arrangement.Start,
         modifier = modifier
@@ -199,7 +203,7 @@ fun BackHeader(title: String, modifier: Modifier = Modifier) {
     ) {
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
+            onClick = { if (upButton != null) upButton() }
         ) {
             Icon(
                 Icons.Outlined.ArrowBack,

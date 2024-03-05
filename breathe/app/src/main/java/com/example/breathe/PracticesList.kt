@@ -39,7 +39,7 @@ import com.example.breathe.ui.theme.BreatheTheme
 fun PracticeCard(
     practiceNum: Int,
     modifier: Modifier = Modifier,
-    practiceSelected: ((Int)->Unit)? = null
+    practiceButton: ((Int)->Unit)? = null
 ) {
     OutlinedCard(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
@@ -89,8 +89,8 @@ fun PracticeCard(
             )
         }
         FooterButton(stringResource(R.string.select)) {
-            if (practiceSelected != null) {
-                practiceSelected(practiceNum)
+            if (practiceButton != null) {
+                practiceButton(practiceNum)
             }
         }
     }
@@ -99,8 +99,8 @@ fun PracticeCard(
 @Composable
 fun MainHeader(
     modifier: Modifier = Modifier,
-    settingsSelected: (()->Unit)? = null,
-    profileSelected: (()->Unit)? = null
+    settingsButton: (()->Unit)? = null,
+    profileButton: (()->Unit)? = null
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -111,7 +111,7 @@ fun MainHeader(
     ) {
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { if (settingsSelected != null) settingsSelected() }
+            onClick = { if (settingsButton != null) settingsButton() }
         ) {
             Icon(
                 Icons.Outlined.Settings,
@@ -128,7 +128,7 @@ fun MainHeader(
         )
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { if (profileSelected != null) profileSelected() }
+            onClick = { if (profileButton != null) profileButton() }
         ) {
             Icon(
                 Icons.Outlined.AccountCircle,
@@ -143,9 +143,9 @@ fun MainHeader(
 @Composable
 fun PracticesListLayout(
     modifier: Modifier = Modifier,
-    settingsSelected: (()->Unit)? = null,
-    profileSelected: (()->Unit)? = null,
-    practiceSelected: ((Int)->Unit)? = null
+    settingsButton: (()->Unit)? = null,
+    profileButton: (()->Unit)? = null,
+    practiceButton: ((Int)->Unit)? = null
 ) {
     Surface(
         modifier = modifier,
@@ -153,7 +153,7 @@ fun PracticesListLayout(
     ) {
         Column(modifier = modifier)
         {
-            MainHeader(settingsSelected = settingsSelected, profileSelected = profileSelected)
+            MainHeader(settingsButton = settingsButton, profileButton = profileButton)
             val numbers = (0..3).toList()
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -166,7 +166,7 @@ fun PracticesListLayout(
                     PracticeCard(
                         practiceNum = it,
                         modifier = modifier,
-                        practiceSelected = practiceSelected
+                        practiceButton = practiceButton
                     )
                 }
             }

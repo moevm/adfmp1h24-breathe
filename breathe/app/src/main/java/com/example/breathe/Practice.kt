@@ -32,7 +32,13 @@ import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun PracticeLayout(practiceNum: Int, modifier: Modifier = Modifier) {
+fun PracticeLayout(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    infoButton: ((Int)->Unit)? = null,
+    startButton: (()->Unit)? = null,
+    upButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -44,7 +50,11 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier = Modifier) {
             Column (
                 modifier = Modifier
             ) {
-                PracticeHeader(practiceNum)
+                PracticeHeader(
+                    practiceNum = practiceNum,
+                    infoButton = infoButton,
+                    upButton = upButton
+                )
                 Text(
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall,
@@ -95,15 +105,18 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier = Modifier) {
                 }
 
             }
-            FooterButton(stringResource(R.string.start), 20) {
-                /*TODO*/
-            }
+            FooterButton(text = stringResource(R.string.start), offset = 20, onClick = startButton)
         }
     }
 }
 
 @Composable
-fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
+fun PracticeHeader(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    infoButton: ((Int)->Unit)? = null,
+    upButton: (()->Unit)? = null
+) {
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
@@ -113,7 +126,7 @@ fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
     ) {
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
+            onClick = { if (upButton != null) upButton() }
         ) {
             Icon(
                 Icons.Outlined.ArrowBack,
@@ -130,7 +143,7 @@ fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
         )
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
+            onClick = { if (infoButton != null) infoButton(practiceNum) }
         ) {
             Icon(
                 Icons.Outlined.Info,
