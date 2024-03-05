@@ -47,6 +47,7 @@ fun TrainingLayout(
         Column (
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
+                .fillMaxSize()
         ) {
             Column (
                 modifier = Modifier
@@ -67,7 +68,7 @@ fun TrainingTimer(modifier: Modifier = Modifier) {
     Box (
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .height(700.dp)
+            .height(600.dp)
             .fillMaxWidth()
     ) {
         CircleBackground(

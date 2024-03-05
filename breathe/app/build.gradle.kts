@@ -73,4 +73,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation("co.yml:ycharts:2.1.0")
+//    implementation("com.himanshoe:charty:2.0.0-alpha01")
 }
