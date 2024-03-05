@@ -42,6 +42,37 @@ class About : ComponentActivity() {
     }
 }
 
+@Composable
+fun AboutHeader(modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        IconButton(
+            modifier = modifier.scale(1.6F),
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                Icons.Outlined.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = modifier
+            )
+        }
+        Text(
+            text = stringResource(R.string.about),
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = modifier.align(Alignment.CenterVertically)
+        )
+        Spacer(
+            modifier = Modifier.width(60.dp)
+        )
+    }
+}
 
 @Composable
 fun AboutLayout(modifier: Modifier = Modifier) {
