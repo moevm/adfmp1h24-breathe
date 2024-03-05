@@ -29,7 +29,8 @@ fun ProfileLayout(modifier: Modifier = Modifier) {
         ) {
             BackHeaderWithButton(
                 stringResource(R.string.profile_title),
-                { /* TODO */ }
+                upButton = { /* TODO */ },
+                secondButton = { /* TODO */ }
             )
             ProgressBarWithText(
                 0.7f,

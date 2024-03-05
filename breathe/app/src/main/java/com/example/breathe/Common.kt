@@ -264,23 +264,27 @@ fun FooterButton(
     offset: Int = 0,
     onClick: (()->Unit)? = null
 ) {
-    Divider(
-        color = MaterialTheme.colorScheme.outline,
-        thickness = 2.dp,
-        modifier = Modifier.padding(0.dp, offset.dp, 0.dp, 0.dp)
-    )
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = {
-            if (onClick != null) {
-                onClick()
-            }
-        }) {
-        Text(
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleLarge,
-            text = text,
+    Column (
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
+        Divider(
+            color = MaterialTheme.colorScheme.outline,
+            thickness = 2.dp,
+            modifier = Modifier.padding(0.dp, offset.dp, 0.dp, 0.dp)
         )
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                if (onClick != null) {
+                    onClick()
+                }
+            }) {
+            Text(
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleLarge,
+                text = text,
+            )
+        }
     }
 }
 
@@ -411,6 +415,7 @@ fun StatisticsChart(
     Column (
         modifier = modifier
             .padding(8.dp)
+            .background(Color.Transparent)
     ){
         if (headerText.isNotEmpty()) {
             Row(
@@ -434,7 +439,7 @@ fun StatisticsChart(
             }
         }
         StackedBarChart(
-            modifier = modifier.height(300.dp),
+            modifier = modifier.height(300.dp).background(Color.Transparent),
             groupBarChartData = chartData
         )
     }
@@ -595,8 +600,9 @@ fun ProgressBarWithText(
 @Composable
 fun BackHeaderWithButton(
     title: String,
-    buttonCallback: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    upButton: (() -> Unit)? = null,
+    secondButton: (() -> Unit)? = null
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -606,7 +612,7 @@ fun BackHeaderWithButton(
     ) {
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
+            onClick = { if (upButton != null) upButton() }
         ) {
             Icon(
                 Icons.Outlined.ArrowBack,
@@ -625,7 +631,7 @@ fun BackHeaderWithButton(
         )
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = buttonCallback
+            onClick = { if (secondButton != null) secondButton() }
         ) {
             Icon(
                 Icons.Outlined.DateRange,
