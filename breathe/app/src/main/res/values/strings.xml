@@ -46,6 +46,13 @@
         <item>декабря</item>
     </string-array>
 
+    <string-array name="about_names">
+        <item>Алексеев Роман</item>
+        <item>Говорющенко Анастасия</item>
+        <item>Люлин Денис</item>
+        <item>Максименко Егор</item>
+    </string-array>
+
     <string name="warning">Осторожно: присутствует опасность асфиксии</string>
 
     <string name="arrow_back">Назад</string>
@@ -58,6 +65,11 @@
     <string name="phase_duration">Продолжительность фаз дыхания</string>
     <string name="notifications">Уведомления</string>
     <string name="history">История</string>
+    <string name="about">О программе</string>
+    <string name="astana_quantum_system">
+        Коллектив производственного объединения \"Astana Quantum System\"\n
+        г. Каскелен, ул. Рощи, д. -1, каб. 0304
+    </string>
     <string name="profile">Ваш профиль</string>
     <string name="achievements">Достижения</string>
     <string name="results">Общие результаты</string>
