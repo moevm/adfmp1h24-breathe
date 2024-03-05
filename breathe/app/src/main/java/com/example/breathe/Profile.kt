@@ -20,15 +20,20 @@ fun ProfileLayout(modifier: Modifier = Modifier) {
         val chartLabels: List<String> = stringArrayResource(R.array.chart_labels).asList()
         val values = listOf(3.0f, 4.0f, 6.0f, 8.0f)
         val expected = listOf(4.0f, 4.0f, 4.0f, 4.0f)
+
         Column(
             modifier = modifier
         ) {
+            AchievementsCard(
+                listOf("a1", "a2", "a3", "a4", "a5"),
+                listOf("a6", "a7", "a8", "a9")
+            )
             StatisticsChart(
                 chartLabels,
                 values,
                 expected,
                 4,
-                headerText = stringResource(R.string.training_results_header)
+                headerText = stringResource(R.string.total_results_header)
             )
         }
     }

@@ -1,12 +1,17 @@
 package com.example.breathe
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -17,6 +22,7 @@ import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -389,11 +395,14 @@ fun StatisticsChart(
         },
         backgroundColor = Color.Transparent
     )
-    Column{
+    Column (
+        modifier = modifier
+            .padding(8.dp)
+    ){
         if (headerText.isNotEmpty()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 4.dp, end = 4.dp)
@@ -415,5 +424,67 @@ fun StatisticsChart(
             modifier = modifier.height(300.dp),
             groupBarChartData = chartData
         )
+    }
+}
+
+@Composable
+fun AchievementsCard(
+    achievementsReached: List<String>,
+    achievementsNotReached: List<String>,
+    modifier: Modifier = Modifier
+) {
+    val achievements = achievementsReached + achievementsNotReached
+    val total = achievements.size
+    val cols = 4
+    val rows = (total + cols - 1) / cols
+    val maxRows = 2
+    val rowHeight = 70
+    val rowPadding = 5
+    val activeColor = Color.White.copy(alpha = 0.9f)
+    val inactiveColor = Color.White.copy(alpha = 0.4f)
+
+    Card(
+        border = BorderStroke(2.dp, colorResource(R.color.timer_background_light)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+        ),
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        LazyColumn(
+            verticalArrangement = Arrangement.Top,
+            userScrollEnabled = true,
+            modifier = modifier
+                .height(((rowHeight + 2 * rowPadding) * maxRows).dp)
+                .padding(10.dp)
+        ) {
+            items(rows) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier
+                        .height(rowHeight.dp)
+                        .padding(vertical = rowPadding.dp)
+                        .fillMaxSize()
+                ) {
+                    for (col in 0..<cols) {
+                        val index = it * cols + col
+                        if (index >= total) {
+                            Spacer(Modifier.size(rowHeight.dp))
+                        } else {
+                            Icon(
+                                Icons.Outlined.Info,
+                                contentDescription = achievements[index],
+                                tint = if (index < achievementsReached.size)
+                                    activeColor
+                                else
+                                    inactiveColor,
+                                modifier = Modifier
+                                    .size(rowHeight.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
