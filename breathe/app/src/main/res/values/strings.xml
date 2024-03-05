@@ -62,6 +62,9 @@
         <item>Удержание</item>
     </string-array>
 
+    <string name="total_results_header">Общие результаты</string>
+    <string name="training_results_header">Продолжительность фаз дыхания</string>
+
     <string name="arrow_back">Назад</string>
     <string name="information">Подробная информация</string>
     <string name="select">Выбрать</string>

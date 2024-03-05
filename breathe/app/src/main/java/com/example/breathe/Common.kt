@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -272,7 +273,8 @@ fun StatisticsChart(
     values: List<Float>,
     expected: List<Float>,
     yStepsCount: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    headerText: String = ""
 ) {
     if ( labels.size != values.size || values.size != expected.size )
     {
@@ -387,8 +389,31 @@ fun StatisticsChart(
         },
         backgroundColor = Color.Transparent
     )
-    StackedBarChart(
-        modifier = modifier.height(300.dp),
-        groupBarChartData = chartData
-    )
+    Column{
+        if (headerText.isNotEmpty()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp)
+            ) {
+                Text(
+                    text = headerText,
+                    color = white,
+                    fontSize = 18.sp
+                )
+                Icon(
+                    Icons.Outlined.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp)
+                )
+            }
+        }
+        StackedBarChart(
+            modifier = modifier.height(300.dp),
+            groupBarChartData = chartData
+        )
+    }
 }
