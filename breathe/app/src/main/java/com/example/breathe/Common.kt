@@ -1,7 +1,10 @@
 package com.example.breathe
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,11 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
@@ -36,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.geometry.Size
@@ -405,7 +412,7 @@ fun StatisticsChart(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 4.dp, end = 4.dp)
+                    .padding(horizontal = 4.dp)
             ) {
                 Text(
                     text = headerText,
@@ -428,59 +435,94 @@ fun StatisticsChart(
 }
 
 @Composable
+fun AchievementWithText(
+    text: String,
+    size: Int,
+    tint: Color,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(size.dp)
+            .clip(CircleShape)
+            .background(Color.Transparent)
+            .border(
+                width = 2.dp,
+                color = tint,
+                shape = CircleShape
+            )
+    ) {
+        Text(
+            text = text,
+            color = tint,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize()
+        )
+    }
+}
+
+
+@Composable
 fun AchievementsCard(
     achievementsReached: List<String>,
     achievementsNotReached: List<String>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    headerText: String = ""
 ) {
     val achievements = achievementsReached + achievementsNotReached
     val total = achievements.size
     val cols = 4
     val rows = (total + cols - 1) / cols
     val maxRows = 2
-    val rowHeight = 70
+    val rowHeight = 80
     val rowPadding = 5
     val activeColor = Color.White.copy(alpha = 0.9f)
     val inactiveColor = Color.White.copy(alpha = 0.4f)
 
-    Card(
-        border = BorderStroke(2.dp, colorResource(R.color.timer_background_light)),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent,
-        ),
-        modifier = Modifier
-            .padding(8.dp)
-    ) {
-        LazyColumn(
-            verticalArrangement = Arrangement.Top,
-            userScrollEnabled = true,
-            modifier = modifier
-                .height(((rowHeight + 2 * rowPadding) * maxRows).dp)
-                .padding(10.dp)
+    Column (modifier = modifier.padding(8.dp)) {
+        if (headerText.isNotEmpty()) {
+            Text(
+                text = headerText,
+                color = activeColor,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+        Card(
+            border = BorderStroke(2.dp, colorResource(R.color.timer_background_light)),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+            )
         ) {
-            items(rows) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .height(rowHeight.dp)
-                        .padding(vertical = rowPadding.dp)
-                        .fillMaxSize()
-                ) {
-                    for (col in 0..<cols) {
-                        val index = it * cols + col
-                        if (index >= total) {
-                            Spacer(Modifier.size(rowHeight.dp))
-                        } else {
-                            Icon(
-                                Icons.Outlined.Info,
-                                contentDescription = achievements[index],
-                                tint = if (index < achievementsReached.size)
-                                    activeColor
-                                else
-                                    inactiveColor,
-                                modifier = Modifier
-                                    .size(rowHeight.dp)
-                            )
+            LazyColumn(
+                verticalArrangement = Arrangement.Top,
+                userScrollEnabled = true,
+                modifier = Modifier
+                    .height(((rowHeight + 2 * rowPadding) * maxRows).dp)
+                    .padding(10.dp)
+            ) {
+                items(rows) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier
+                            .height(rowHeight.dp)
+                            .padding(vertical = rowPadding.dp)
+                            .fillMaxSize()
+                    ) {
+                        for (col in 0..<cols) {
+                            val index = it * cols + col
+                            if (index >= total) {
+                                Spacer(Modifier.size(rowHeight.dp))
+                            } else {
+                                AchievementWithText(
+                                    achievements[index],
+                                    rowHeight,
+                                    if (index < achievementsReached.size) activeColor else inactiveColor
+                                )
+                            }
                         }
                     }
                 }

@@ -26,7 +26,8 @@ fun ProfileLayout(modifier: Modifier = Modifier) {
         ) {
             AchievementsCard(
                 listOf("a1", "a2", "a3", "a4", "a5"),
-                listOf("a6", "a7", "a8", "a9")
+                listOf("a6", "a7", "a8", "a9"),
+                headerText = "Достижения"
             )
             StatisticsChart(
                 chartLabels,
