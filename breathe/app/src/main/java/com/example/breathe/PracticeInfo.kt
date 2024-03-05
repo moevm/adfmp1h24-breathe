@@ -70,7 +70,12 @@ fun TimeWithTitle(time: Int, title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
+fun PracticeInfoLayout(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    startButton: ((Int)->Unit)? = null,
+    upButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -85,7 +90,7 @@ fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
             val textMod : Modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp, 0.dp, 15.dp, 20.dp)
-            BackHeader(practiceName)
+            BackHeader(title = practiceName, upButton = upButton)
             Text(
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall,
@@ -147,7 +152,11 @@ fun PracticeInfoLayout(practiceNum: Int, modifier: Modifier = Modifier) {
                 TimeWithTitle(breathTime, stringResource(R.string.breath_out))
                 TimeWithTitle(breathTime, stringResource(R.string.hold))
             }
-            FooterButton(stringResource(R.string.start), 110)
+            FooterButton(text = stringResource(R.string.start), offset = 110) {
+                if (startButton != null) {
+                    startButton(practiceNum)
+                }
+            }
         }
     }
 }

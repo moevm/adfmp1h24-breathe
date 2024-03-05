@@ -1,8 +1,5 @@
 package com.example.breathe
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,19 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
-class PracticeActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BreatheTheme {
-                PracticeLayout(2, Modifier.fillMaxSize())
-            }
-        }
-    }
-}
-
 @Composable
-fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
+fun PracticeLayout(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    infoButton: ((Int)->Unit)? = null,
+    startButton: ((Int)->Unit)? = null,
+    upButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -58,7 +50,11 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
             Column (
                 modifier = Modifier
             ) {
-                PracticeHeader(practiceNum)
+                PracticeHeader(
+                    practiceNum = practiceNum,
+                    infoButton = infoButton,
+                    upButton = upButton
+                )
                 Text(
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall,
@@ -109,15 +105,22 @@ fun PracticeLayout(practiceNum: Int, modifier: Modifier) {
                 }
 
             }
-            FooterButton(stringResource(R.string.start), 20) {
-                /*TODO*/
+            FooterButton(text = stringResource(R.string.start), offset = 20) {
+                if (startButton != null) {
+                    startButton(practiceNum)
+                }
             }
         }
     }
 }
 
 @Composable
-fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
+fun PracticeHeader(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    infoButton: ((Int)->Unit)? = null,
+    upButton: (()->Unit)? = null
+) {
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
@@ -127,7 +130,7 @@ fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
     ) {
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
+            onClick = { if (upButton != null) upButton() }
         ) {
             Icon(
                 Icons.Outlined.ArrowBack,
@@ -144,7 +147,7 @@ fun PracticeHeader(practiceNum: Int, modifier: Modifier = Modifier) {
         )
         IconButton(
             modifier = modifier.scale(1.6F),
-            onClick = { /*TODO*/ }
+            onClick = { if (infoButton != null) infoButton(practiceNum) }
         ) {
             Icon(
                 Icons.Outlined.Info,

@@ -1,8 +1,5 @@
 package com.example.breathe
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,18 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
-class TrainingActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BreatheTheme {
-                TrainingLayout(2, Modifier.fillMaxSize())
-            }
-        }
-    }
-}
 @Composable
-fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
+fun TrainingLayout(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    stopButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -63,9 +54,7 @@ fun TrainingLayout(practiceNum: Int, modifier: Modifier) {
                 TrainingHeader(practiceNum)
                 TrainingTimer()
             }
-            FooterButton(stringResource(R.string.stop), 30) {
-                /*TODO*/
-            }
+            FooterButton(text = stringResource(R.string.stop), offset = 30, onClick = stopButton)
         }
     }
 }
