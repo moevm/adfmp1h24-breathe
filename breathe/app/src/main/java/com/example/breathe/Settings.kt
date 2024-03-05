@@ -25,13 +25,16 @@ import androidx.compose.ui.unit.dp
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun SettingsLayout(modifier: Modifier = Modifier) {
+fun SettingsLayout(
+    modifier: Modifier = Modifier,
+    upButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = modifier) {
-            BackHeader(stringResource(R.string.settings))
+            BackHeader(title = stringResource(R.string.settings), upButton = upButton)
             Row(
                 modifier = Modifier.fillMaxWidth().padding(0.dp, 0.dp, 0.dp, 50.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly

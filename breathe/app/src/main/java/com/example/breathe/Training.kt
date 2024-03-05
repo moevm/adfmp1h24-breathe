@@ -35,7 +35,11 @@ import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
-fun TrainingLayout(practiceNum: Int, modifier: Modifier = Modifier) {
+fun TrainingLayout(
+    practiceNum: Int,
+    modifier: Modifier = Modifier,
+    stopButton: (()->Unit)? = null
+) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -50,9 +54,7 @@ fun TrainingLayout(practiceNum: Int, modifier: Modifier = Modifier) {
                 TrainingHeader(practiceNum)
                 TrainingTimer()
             }
-            FooterButton(stringResource(R.string.stop), 30) {
-                /*TODO*/
-            }
+            FooterButton(text = stringResource(R.string.stop), offset = 30, onClick = stopButton)
         }
     }
 }

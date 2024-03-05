@@ -19,7 +19,8 @@ enum class BreatheScreen {
     Settings,
     Profile,
     History,
-    PracticeInfo
+    PracticeInfo,
+    About
 }
 
 @Composable
@@ -63,6 +64,9 @@ fun BreatheApp() {
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 PracticeInfoLayout(it)
             }
+        }
+        composable(BreatheScreen.About.name) {
+            PracticesListLayout()
         }
     }
 }
