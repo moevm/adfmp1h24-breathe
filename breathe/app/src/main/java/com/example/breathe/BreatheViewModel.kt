@@ -76,6 +76,37 @@ class BreatheViewModel : ViewModel() {
         }
     }
 
+    fun setPracticeMinutes(value: Int) {
+        _practiceState.update { currentState ->
+            currentState.copy(
+                totalSeconds = value * 60 + currentState.totalSeconds % 60,
+                currentSeconds = value * 60 + currentState.totalSeconds % 60
+            )
+        }
+    }
+
+    fun setPracticeSeconds(value: Int) {
+        _practiceState.update { currentState ->
+            currentState.copy(
+                totalSeconds = value % 60 + currentState.totalSeconds - currentState.totalSeconds % 60,
+                currentSeconds = value % 60 + currentState.totalSeconds - currentState.totalSeconds % 60
+            )
+        }
+    }
+
+    fun setPracticePhaseTime(phase: Int, time: Int) {
+        fun updated( arr: IntArray, i: Int, value: Int ) : IntArray {
+            val cloned = arr.clone()
+            cloned[i] = value
+            return cloned
+        }
+        _practiceState.update { currentState ->
+            currentState.copy(
+                phaseTimes = updated(currentState.phaseTimes, phase, time)
+            )
+        }
+    }
+
     fun timerEnd() {
         // TODO save breath statistics to some storage
     }

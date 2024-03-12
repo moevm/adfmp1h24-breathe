@@ -67,6 +67,11 @@ fun BreatheApp(
                 PracticeLayout(
                     practiceNum = it,
                     currentPracticeState = practiceState,
+                    onMinutesChanged = { value -> viewModel.setPracticeMinutes(value) },
+                    onSecondsChanged = { value -> viewModel.setPracticeSeconds(value) },
+                    onPhaseTimeChanged = { phase, time ->
+                        viewModel.setPracticePhaseTime(phase, time)
+                    },
                     infoButton = { num -> navController.navigate(
                         BreatheScreen.PracticeInfo.name + "/$num") },
                     startButton = { num ->
