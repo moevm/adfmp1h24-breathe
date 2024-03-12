@@ -66,6 +66,7 @@ fun BreatheApp(
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 PracticeLayout(
                     practiceNum = it,
+                    currentPracticeState = practiceState,
                     infoButton = { num -> navController.navigate(
                         BreatheScreen.PracticeInfo.name + "/$num") },
                     startButton = { num ->

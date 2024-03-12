@@ -95,7 +95,7 @@ fun PracticeCard(
         val phaseTimes = integerArrayResource(practiceIds[practiceNum])
         FooterButton(stringResource(R.string.select)) {
             if (onPracticeSelected != null) {
-                onPracticeSelected(practiceTime, phaseTimes)
+                onPracticeSelected(practiceTime * 60, phaseTimes)
             }
             if (practiceButton != null) {
                 practiceButton(practiceNum)
