@@ -54,9 +54,8 @@ fun SettingsLayout(
                     text = stringResource(R.string.notifications),
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                val checked = currentSettingsState.notifications
                 Switch(
-                    checked = checked,
+                    checked = currentSettingsState.notifications,
                     onCheckedChange = {
                         if (onNotifyChange != null) onNotifyChange(it)
                     },
@@ -75,7 +74,7 @@ fun SettingsLayout(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 TimeFieldWithText(
-                    defaultValue = 24,
+                    defaultValue = currentSettingsState.notifyTimeHours,
                     width = 80,
                     text = stringResource(R.string.hrs),
                     onValueChange = {
@@ -83,7 +82,7 @@ fun SettingsLayout(
                     }
                 )
                 TimeFieldWithText(
-                    defaultValue = 0,
+                    defaultValue = currentSettingsState.notifyTimeMinutes,
                     width = 80,
                     text = stringResource(R.string.min),
                     onValueChange = {

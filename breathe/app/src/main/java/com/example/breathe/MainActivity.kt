@@ -102,6 +102,8 @@ fun BreatheApp(
             SettingsLayout(
                 currentSettingsState = settingsState,
                 onNotifyChange = { viewModel.saveNotifications(it) },
+                onHoursChange = { viewModel.saveNotifyTimeHours(it) },
+                onMinutesChange = { viewModel.saveNotifyTimeMinutes(it) },
                 aboutButton = { navController.navigate(BreatheScreen.About.name) },
                 upButton = { navController.navigateUp() }
             )

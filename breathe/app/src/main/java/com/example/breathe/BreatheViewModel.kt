@@ -28,4 +28,13 @@ class BreatheViewModel : ViewModel() {
         // TODO save to some storage
     }
 
+    fun saveNotifyTimeHours(value: Int) {
+        _settingsState.update { currentState -> currentState.copy(notifyTimeHours = value) }
+        // TODO save to some storage
+    }
+
+    fun saveNotifyTimeMinutes(value: Int) {
+        _settingsState.update { currentState -> currentState.copy(notifyTimeMinutes = value) }
+        // TODO save to some storage
+    }
 }
