@@ -16,7 +16,25 @@ data class BreathePracticeState(
     val totalSeconds: Int = 0,
     val currentSeconds: Int = 0,
     val phaseTimes: IntArray = IntArray(4)
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as BreathePracticeState
+
+        if (totalSeconds != other.totalSeconds) return false
+        if (currentSeconds != other.currentSeconds) return false
+        return phaseTimes.contentEquals(other.phaseTimes)
+    }
+
+    override fun hashCode(): Int {
+        var result = totalSeconds
+        result = 31 * result + currentSeconds
+        result = 31 * result + phaseTimes.contentHashCode()
+        return result
+    }
+}
 
 class BreatheViewModel : ViewModel() {
     private val _settingsState = MutableStateFlow(BreatheSettingsState())
@@ -51,6 +69,7 @@ class BreatheViewModel : ViewModel() {
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {
         _practiceState.update { currentState ->
             currentState.copy(
+                totalSeconds = seconds,
                 currentSeconds = seconds,
                 phaseTimes = phaseTimes
             )

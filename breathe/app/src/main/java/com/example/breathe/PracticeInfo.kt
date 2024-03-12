@@ -17,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.integerArrayResource
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -73,6 +71,7 @@ fun TimeWithTitle(time: Int, title: String, modifier: Modifier = Modifier) {
 fun PracticeInfoLayout(
     practiceNum: Int,
     modifier: Modifier = Modifier,
+    currentPracticeState: BreathePracticeState = BreathePracticeState(),
     startButton: ((Int)->Unit)? = null,
     upButton: (()->Unit)? = null
 ) {
@@ -86,10 +85,10 @@ fun PracticeInfoLayout(
         ) {
             val practiceName: String = stringArrayResource(R.array.exercise_name)[practiceNum]
             val practiceText: String = stringArrayResource(R.array.exercise_desc)[practiceNum]
-            val practiceMinutes: Int =  integerArrayResource(R.array.exercise_time)[practiceNum]
-            val breathTime: Int = integerResource(R.integer.breathe_time)
-            val practiceTime: String = practiceMinutes.toString() + " " +
-                    stringResource(R.string.min) + " 0 " + stringResource(R.string.sec)
+            val practiceMinutes = currentPracticeState.totalSeconds / 60
+            val practiceSeconds = currentPracticeState.totalSeconds % 60
+            val practiceTime: String = "$practiceMinutes " +
+                    stringResource(R.string.min) + " $practiceSeconds " + stringResource(R.string.sec)
             val textMod : Modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp, 0.dp, 15.dp, 20.dp)
@@ -151,10 +150,10 @@ fun PracticeInfoLayout(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    TimeWithTitle(breathTime, stringResource(R.string.breath_in))
-                    TimeWithTitle(breathTime, stringResource(R.string.hold))
-                    TimeWithTitle(breathTime, stringResource(R.string.breath_out))
-                    TimeWithTitle(breathTime, stringResource(R.string.hold))
+                    TimeWithTitle(currentPracticeState.phaseTimes[0], stringResource(R.string.breath_in))
+                    TimeWithTitle(currentPracticeState.phaseTimes[1], stringResource(R.string.hold))
+                    TimeWithTitle(currentPracticeState.phaseTimes[2], stringResource(R.string.breath_out))
+                    TimeWithTitle(currentPracticeState.phaseTimes[3], stringResource(R.string.hold))
                 }
             }
             FooterButton(text = stringResource(R.string.start), offset = 0) {
