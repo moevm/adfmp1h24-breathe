@@ -34,6 +34,9 @@ fun PracticeLayout(
     practiceNum: Int,
     modifier: Modifier = Modifier,
     currentPracticeState: BreathePracticeState = BreathePracticeState(),
+    onMinutesChanged: ((Int)->Unit)? = null,
+    onSecondsChanged: ((Int)->Unit)? = null,
+    onPhaseTimeChanged: ((Int, Int)->Unit)? = null,
     infoButton: ((Int)->Unit)? = null,
     startButton: ((Int)->Unit)? = null,
     upButton: (()->Unit)? = null
@@ -78,12 +81,14 @@ fun PracticeLayout(
                     TimeFieldWithText(
                         defaultValue = currentPracticeState.totalSeconds / 60,
                         width = 80,
-                        text = stringResource(R.string.min)
+                        text = stringResource(R.string.min),
+                        onValueChange = onMinutesChanged
                     )
                     TimeFieldWithText(
                         defaultValue = currentPracticeState.totalSeconds % 60,
                         width = 80,
-                        text = stringResource(R.string.sec)
+                        text = stringResource(R.string.sec),
+                        onValueChange = onSecondsChanged
                     )
                 }
                 Row (
@@ -92,13 +97,25 @@ fun PracticeLayout(
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[0], 70,
-                        stringResource(R.string.hold), stringResource(R.string.sec))
+                        stringResource(R.string.hold), stringResource(R.string.sec),
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(0, it)
+                        })
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[1], 70,
-                        stringResource(R.string.breath_in), stringResource(R.string.sec))
+                        stringResource(R.string.breath_in), stringResource(R.string.sec),
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(1, it)
+                        })
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[2], 70,
-                        stringResource(R.string.hold), stringResource(R.string.sec))
+                        stringResource(R.string.hold), stringResource(R.string.sec),
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(2, it)
+                        })
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[3], 70,
-                        stringResource(R.string.breath_out), stringResource(R.string.sec))
+                        stringResource(R.string.breath_out), stringResource(R.string.sec),
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(3, it)
+                        })
                 }
 
             }
