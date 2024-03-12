@@ -53,8 +53,12 @@ fun BreatheApp(
             PracticesListLayout(
                 settingsButton = { navController.navigate(BreatheScreen.Settings.name) },
                 profileButton = { navController.navigate(BreatheScreen.Profile.name) },
+                onPracticeSelected = { seconds, phaseTimes ->
+                    viewModel.setSettingsState(seconds, phaseTimes)
+                },
                 practiceButton = { num ->
-                    navController.navigate(BreatheScreen.Practice.name + "/$num") }
+                    navController.navigate(BreatheScreen.Practice.name + "/$num")
+                }
             )
         }
         composable(BreatheScreen.Practice.name + practiceNumUrl, arguments = arguments) {

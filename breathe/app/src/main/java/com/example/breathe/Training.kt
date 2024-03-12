@@ -89,7 +89,6 @@ fun TrainingTimer(
         }
     }
 
-
     Box (
         contentAlignment = Alignment.Center,
         modifier = modifier
