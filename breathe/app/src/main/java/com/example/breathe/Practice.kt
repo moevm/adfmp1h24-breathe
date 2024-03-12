@@ -82,6 +82,7 @@ fun PracticeLayout(
                         defaultValue = currentPracticeState.totalSeconds / 60,
                         width = 80,
                         text = stringResource(R.string.min),
+                        minValue = 1,
                         onValueChange = onMinutesChanged
                     )
                     TimeFieldWithText(
@@ -98,21 +99,25 @@ fun PracticeLayout(
                 ) {
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[0], 70,
                         stringResource(R.string.hold), stringResource(R.string.sec),
+                        minValue = 1,
                         onValueChange = {
                             if (onPhaseTimeChanged != null) onPhaseTimeChanged(0, it)
                         })
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[1], 70,
                         stringResource(R.string.breath_in), stringResource(R.string.sec),
+                        minValue = 1,
                         onValueChange = {
                             if (onPhaseTimeChanged != null) onPhaseTimeChanged(1, it)
                         })
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[2], 70,
                         stringResource(R.string.hold), stringResource(R.string.sec),
+                        minValue = 1,
                         onValueChange = {
                             if (onPhaseTimeChanged != null) onPhaseTimeChanged(2, it)
                         })
                     TimeFieldWithTitle(currentPracticeState.phaseTimes[3], 70,
                         stringResource(R.string.breath_out), stringResource(R.string.sec),
+                        minValue = 1,
                         onValueChange = {
                             if (onPhaseTimeChanged != null) onPhaseTimeChanged(3, it)
                         })
