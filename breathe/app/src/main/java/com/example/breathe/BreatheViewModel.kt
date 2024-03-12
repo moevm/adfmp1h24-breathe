@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 data class BreatheSettingsState(
     val notifications: Boolean = false,
@@ -14,13 +15,17 @@ data class BreatheSettingsState(
 class BreatheViewModel : ViewModel() {
     private val _settingsState = MutableStateFlow(BreatheSettingsState())
     val settingsState: StateFlow<BreatheSettingsState> = _settingsState.asStateFlow()
-
     init {
         reset()
     }
 
     private fun reset() {
         _settingsState.value = BreatheSettingsState() // TODO read from some storage
+    }
+
+    fun saveNotifications(value: Boolean) {
+        _settingsState.update { currentState -> currentState.copy(notifications = value) }
+        // TODO save to some storage
     }
 
 }

@@ -14,10 +14,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +25,10 @@ import com.example.breathe.ui.theme.BreatheTheme
 @Composable
 fun SettingsLayout(
     modifier: Modifier = Modifier,
+    currentSettingsState: BreatheSettingsState = BreatheSettingsState(),
+    onNotifyChange: ((Boolean)->Unit)? = null,
+    onHoursChange: ((Int)->Unit)? = null,
+    onMinutesChange: ((Int)->Unit)? = null,
     aboutButton: (()->Unit)? = null,
     upButton: (()->Unit)? = null
 ) {
@@ -54,11 +54,11 @@ fun SettingsLayout(
                     text = stringResource(R.string.notifications),
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                var checked by remember { mutableStateOf(true) }
+                val checked = currentSettingsState.notifications
                 Switch(
                     checked = checked,
                     onCheckedChange = {
-                        checked = it
+                        if (onNotifyChange != null) onNotifyChange(it)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
@@ -79,7 +79,7 @@ fun SettingsLayout(
                     width = 80,
                     text = stringResource(R.string.hrs),
                     onValueChange = {
-                        /*TODO*/
+                        if (onHoursChange != null) onHoursChange(it)
                     }
                 )
                 TimeFieldWithText(
@@ -87,7 +87,7 @@ fun SettingsLayout(
                     width = 80,
                     text = stringResource(R.string.min),
                     onValueChange = {
-                        /*TODO*/
+                        if (onMinutesChange != null) onMinutesChange(it)
                     }
                 )
             }

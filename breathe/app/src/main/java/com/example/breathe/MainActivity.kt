@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -27,9 +29,11 @@ enum class BreatheScreen {
 }
 
 @Composable
-fun BreatheApp() {
+fun BreatheApp(
+    viewModel: BreatheViewModel = viewModel()
+) {
     val navController = rememberNavController()
-    val viewModel: BreatheViewModel = viewModel()
+    val settingsState by viewModel.settingsState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
@@ -96,6 +100,8 @@ fun BreatheApp() {
         }
         composable(BreatheScreen.Settings.name) {
             SettingsLayout(
+                currentSettingsState = settingsState,
+                onNotifyChange = { viewModel.saveNotifications(it) },
                 aboutButton = { navController.navigate(BreatheScreen.About.name) },
                 upButton = { navController.navigateUp() }
             )
