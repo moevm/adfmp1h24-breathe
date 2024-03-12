@@ -13,8 +13,8 @@ data class BreatheSettingsState(
 )
 
 data class BreathePracticeState(
-    val totalSeconds: Int = 0,
-    val currentSeconds: Int = 0,
+    val totalSeconds: Int = 10,
+    val currentSeconds: Int = 10,
     val phaseTimes: Array<Int> = arrayOf(0, 0, 0, 0)
 )
 
@@ -46,5 +46,18 @@ class BreatheViewModel : ViewModel() {
     fun saveNotifyTimeMinutes(value: Int) {
         _settingsState.update { currentState -> currentState.copy(notifyTimeMinutes = value) }
         // TODO save to some storage
+    }
+
+    fun timerEnd() {
+        // TODO save breath statistics to some storage
+    }
+
+    fun timerTick() {
+        // TODO handle breathe phases with hardware
+        if (_practiceState.value.currentSeconds > 0) {
+            _practiceState.update { currentState ->
+                currentState.copy(currentSeconds = currentState.currentSeconds - 1)
+            }
+        }
     }
 }

@@ -18,9 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +31,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun TrainingLayout(
     practiceNum: Int,
     modifier: Modifier = Modifier,
-    stopButton: ((Int)->Unit)? = null
+    currentPracticeState: BreathePracticeState = BreathePracticeState(),
+    onTimerTick: (()->Unit)?=null,
+    onTimerEnd: (()->Unit)?=null,
+    stopButton: (()->Unit)? = null
 ) {
     Surface(
         modifier = modifier,
@@ -53,11 +55,15 @@ fun TrainingLayout(
                 modifier = Modifier
             ) {
                 TrainingHeader(practiceNum)
-                TrainingTimer()
+                TrainingTimer(
+                    currentPracticeState = currentPracticeState,
+                    onTimerTick = onTimerTick,
+                    onTimerEnd = onTimerEnd
+                )
             }
             FooterButton(text = stringResource(R.string.stop), offset = 30) {
                 if (stopButton != null) {
-                    stopButton(practiceNum)
+                    stopButton()
                 }
             }
         }
@@ -65,9 +71,24 @@ fun TrainingLayout(
 }
 
 @Composable
-fun TrainingTimer(modifier: Modifier = Modifier) {
-    val minutes by remember { mutableIntStateOf(0) }
-    val seconds by remember { mutableIntStateOf(0) }
+fun TrainingTimer(
+    currentPracticeState: BreathePracticeState,
+    modifier: Modifier = Modifier,
+    onTimerTick: (()->Unit)?=null,
+    onTimerEnd: (()->Unit)?=null
+) {
+    val minutes = currentPracticeState.currentSeconds / 60
+    val seconds = currentPracticeState.currentSeconds % 60
+    LaunchedEffect(currentPracticeState.currentSeconds) {
+        delay(1000)
+        if (currentPracticeState.currentSeconds <= 0 && onTimerEnd != null) {
+            onTimerEnd()
+        }
+        else if (onTimerTick != null) {
+            onTimerTick()
+        }
+    }
+
 
     Box (
         contentAlignment = Alignment.Center,

@@ -34,6 +34,7 @@ fun BreatheApp(
 ) {
     val navController = rememberNavController()
     val settingsState by viewModel.settingsState.collectAsState()
+    val practiceState by viewModel.practiceState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
@@ -74,12 +75,19 @@ fun BreatheApp(
         composable(BreatheScreen.Training.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
+                val goToResult = {
+                    navController.navigate(BreatheScreen.TrainingResult.name + "/$it") {
+                        popUpTo(BreatheScreen.PracticesList.name)
+                    }
+                }
                 TrainingLayout(
                     practiceNum = it,
-                    stopButton = { num ->
-                        navController.navigate(BreatheScreen.TrainingResult.name + "/$num") {
-                            popUpTo(BreatheScreen.PracticesList.name)
-                        }
+                    currentPracticeState = practiceState,
+                    stopButton = goToResult,
+                    onTimerTick = { viewModel.timerTick() },
+                    onTimerEnd = {
+                        viewModel.timerEnd()
+                        goToResult()
                     }
                 )
             }
@@ -92,9 +100,11 @@ fun BreatheApp(
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 TrainingResultLayout(
                     practiceNum = it,
-                    mainScreenButton = { navController.navigate(BreatheScreen.PracticesList.name) {
-                        popUpTo(BreatheScreen.PracticesList.name)
-                    } }
+                    mainScreenButton = {
+                        navController.navigate(BreatheScreen.PracticesList.name) {
+                            popUpTo(BreatheScreen.PracticesList.name)
+                        }
+                    }
                 )
             }
         }
