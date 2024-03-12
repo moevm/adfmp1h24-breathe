@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +29,7 @@ enum class BreatheScreen {
 @Composable
 fun BreatheApp() {
     val navController = rememberNavController()
+    val viewModel: BreatheViewModel = viewModel()
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
