@@ -39,6 +39,7 @@ import com.example.breathe.ui.theme.BreatheTheme
 fun PracticeCard(
     practiceNum: Int,
     modifier: Modifier = Modifier,
+    onPracticeSelected: ((Int, IntArray)->Unit)? = null,
     practiceButton: ((Int)->Unit)? = null
 ) {
     OutlinedCard(
@@ -88,7 +89,14 @@ fun PracticeCard(
                     .align(Alignment.CenterVertically)
             )
         }
+        val practiceIds = arrayOf(R.array.phase_times_1, R.array.phase_times_2,
+            R.array.phase_times_3, R.array.phase_times_4)
+        val practiceTime = integerArrayResource(R.array.exercise_time)[practiceNum]
+        val phaseTimes = integerArrayResource(practiceIds[practiceNum])
         FooterButton(stringResource(R.string.select)) {
+            if (onPracticeSelected != null) {
+                onPracticeSelected(practiceTime * 60, phaseTimes)
+            }
             if (practiceButton != null) {
                 practiceButton(practiceNum)
             }
@@ -143,6 +151,7 @@ fun MainHeader(
 @Composable
 fun PracticesListLayout(
     modifier: Modifier = Modifier,
+    onPracticeSelected: ((Int, IntArray)->Unit)? = null,
     settingsButton: (()->Unit)? = null,
     profileButton: (()->Unit)? = null,
     practiceButton: ((Int)->Unit)? = null
@@ -166,7 +175,8 @@ fun PracticesListLayout(
                     PracticeCard(
                         practiceNum = it,
                         modifier = modifier,
-                        practiceButton = practiceButton
+                        practiceButton = practiceButton,
+                        onPracticeSelected = onPracticeSelected
                     )
                 }
             }

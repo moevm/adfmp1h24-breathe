@@ -21,8 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.integerArrayResource
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +33,10 @@ import com.example.breathe.ui.theme.BreatheTheme
 fun PracticeLayout(
     practiceNum: Int,
     modifier: Modifier = Modifier,
+    currentPracticeState: BreathePracticeState = BreathePracticeState(),
+    onMinutesChanged: ((Int)->Unit)? = null,
+    onSecondsChanged: ((Int)->Unit)? = null,
+    onPhaseTimeChanged: ((Int, Int)->Unit)? = null,
     infoButton: ((Int)->Unit)? = null,
     startButton: ((Int)->Unit)? = null,
     upButton: (()->Unit)? = null
@@ -70,7 +72,6 @@ fun PracticeLayout(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val defaultTime : Int = integerArrayResource(R.array.exercise_time)[practiceNum]
                     Icon(
                         painter = painterResource(R.drawable.clock),
                         contentDescription = null,
@@ -78,14 +79,17 @@ fun PracticeLayout(
                         modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp).scale(0.8F)
                     )
                     TimeFieldWithText(
-                        defaultValue = defaultTime,
+                        defaultValue = currentPracticeState.totalSeconds / 60,
                         width = 80,
-                        text = stringResource(R.string.min)
+                        text = stringResource(R.string.min),
+                        minValue = 1,
+                        onValueChange = onMinutesChanged
                     )
                     TimeFieldWithText(
-                        defaultValue = 0,
+                        defaultValue = currentPracticeState.totalSeconds % 60,
                         width = 80,
-                        text = stringResource(R.string.sec)
+                        text = stringResource(R.string.sec),
+                        onValueChange = onSecondsChanged
                     )
                 }
                 Row (
@@ -93,15 +97,30 @@ fun PracticeLayout(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
                 ) {
-                    val defaultTime = integerResource(R.integer.breathe_time)
-                    TimeFieldWithTitle(defaultTime, 70,
-                        stringResource(R.string.hold), stringResource(R.string.sec))
-                    TimeFieldWithTitle(defaultTime, 70,
-                        stringResource(R.string.breath_in), stringResource(R.string.sec))
-                    TimeFieldWithTitle(defaultTime, 70,
-                        stringResource(R.string.hold), stringResource(R.string.sec))
-                    TimeFieldWithTitle(defaultTime, 70,
-                        stringResource(R.string.breath_out), stringResource(R.string.sec))
+                    TimeFieldWithTitle(currentPracticeState.phaseTimes[0], 70,
+                        stringResource(R.string.hold), stringResource(R.string.sec),
+                        minValue = 1,
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(0, it)
+                        })
+                    TimeFieldWithTitle(currentPracticeState.phaseTimes[1], 70,
+                        stringResource(R.string.breath_in), stringResource(R.string.sec),
+                        minValue = 1,
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(1, it)
+                        })
+                    TimeFieldWithTitle(currentPracticeState.phaseTimes[2], 70,
+                        stringResource(R.string.hold), stringResource(R.string.sec),
+                        minValue = 1,
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(2, it)
+                        })
+                    TimeFieldWithTitle(currentPracticeState.phaseTimes[3], 70,
+                        stringResource(R.string.breath_out), stringResource(R.string.sec),
+                        minValue = 1,
+                        onValueChange = {
+                            if (onPhaseTimeChanged != null) onPhaseTimeChanged(3, it)
+                        })
                 }
 
             }

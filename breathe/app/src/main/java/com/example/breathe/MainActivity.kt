@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,8 +29,12 @@ enum class BreatheScreen {
 }
 
 @Composable
-fun BreatheApp() {
+fun BreatheApp(
+    viewModel: BreatheViewModel = viewModel()
+) {
     val navController = rememberNavController()
+    val settingsState by viewModel.settingsState.collectAsState()
+    val practiceState by viewModel.practiceState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
@@ -46,8 +53,12 @@ fun BreatheApp() {
             PracticesListLayout(
                 settingsButton = { navController.navigate(BreatheScreen.Settings.name) },
                 profileButton = { navController.navigate(BreatheScreen.Profile.name) },
+                onPracticeSelected = { seconds, phaseTimes ->
+                    viewModel.setSettingsState(seconds, phaseTimes)
+                },
                 practiceButton = { num ->
-                    navController.navigate(BreatheScreen.Practice.name + "/$num") }
+                    navController.navigate(BreatheScreen.Practice.name + "/$num")
+                }
             )
         }
         composable(BreatheScreen.Practice.name + practiceNumUrl, arguments = arguments) {
@@ -55,6 +66,12 @@ fun BreatheApp() {
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 PracticeLayout(
                     practiceNum = it,
+                    currentPracticeState = practiceState,
+                    onMinutesChanged = { value -> viewModel.setPracticeMinutes(value) },
+                    onSecondsChanged = { value -> viewModel.setPracticeSeconds(value) },
+                    onPhaseTimeChanged = { phase, time ->
+                        viewModel.setPracticePhaseTime(phase, time)
+                    },
                     infoButton = { num -> navController.navigate(
                         BreatheScreen.PracticeInfo.name + "/$num") },
                     startButton = { num ->
@@ -68,12 +85,19 @@ fun BreatheApp() {
         composable(BreatheScreen.Training.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
+                val goToResult = {
+                    navController.navigate(BreatheScreen.TrainingResult.name + "/$it") {
+                        popUpTo(BreatheScreen.PracticesList.name)
+                    }
+                }
                 TrainingLayout(
                     practiceNum = it,
-                    stopButton = { num ->
-                        navController.navigate(BreatheScreen.TrainingResult.name + "/$num") {
-                            popUpTo(BreatheScreen.PracticesList.name)
-                        }
+                    currentPracticeState = practiceState,
+                    stopButton = goToResult,
+                    onTimerTick = { viewModel.timerTick() },
+                    onTimerEnd = {
+                        viewModel.timerEnd()
+                        goToResult()
                     }
                 )
             }
@@ -86,14 +110,20 @@ fun BreatheApp() {
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 TrainingResultLayout(
                     practiceNum = it,
-                    mainScreenButton = { navController.navigate(BreatheScreen.PracticesList.name) {
-                        popUpTo(BreatheScreen.PracticesList.name)
-                    } }
+                    mainScreenButton = {
+                        navController.navigate(BreatheScreen.PracticesList.name) {
+                            popUpTo(BreatheScreen.PracticesList.name)
+                        }
+                    }
                 )
             }
         }
         composable(BreatheScreen.Settings.name) {
             SettingsLayout(
+                currentSettingsState = settingsState,
+                onNotifyChange = { viewModel.saveNotifications(it) },
+                onHoursChange = { viewModel.saveNotifyTimeHours(it) },
+                onMinutesChange = { viewModel.saveNotifyTimeMinutes(it) },
                 aboutButton = { navController.navigate(BreatheScreen.About.name) },
                 upButton = { navController.navigateUp() }
             )
@@ -112,6 +142,7 @@ fun BreatheApp() {
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 PracticeInfoLayout(
                     practiceNum = it,
+                    currentPracticeState = practiceState,
                     startButton = { num ->
                         navController.navigate(BreatheScreen.Training.name + "/$num") },
                     upButton = { navController.navigateUp() }
