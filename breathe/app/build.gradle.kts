@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.protobuf") version "0.9.4"
+    id("com.google.dagger.hilt.android") version "2.44" apply false
 }
 
 android {
@@ -79,9 +80,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("co.yml:ycharts:2.1.0")
     implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("androidx.datastore:datastore:1.0.0")
     implementation("com.google.protobuf:protobuf-javalite:3.18.0")
     implementation("com.google.protobuf:protobuf-kotlin-lite:3.18.0")
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
+    implementation("com.google.dagger:hilt-android:2.44")
 }
 
 protobuf {

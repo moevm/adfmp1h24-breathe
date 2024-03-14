@@ -1,16 +1,15 @@
 package com.example.breathe
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-
-data class BreatheSettingsState(
-    val notifications: Boolean = false,
-    val notifyTimeHours: Int = 24,
-    val notifyTimeMinutes: Int = 0,
-)
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class BreathePracticeState(
     val totalSeconds: Int = 0,
@@ -36,34 +35,32 @@ data class BreathePracticeState(
     }
 }
 
-class BreatheViewModel : ViewModel() {
-    private val _settingsState = MutableStateFlow(BreatheSettingsState())
+@HiltViewModel
+class BreatheViewModel @Inject constructor(
+    private val settingsDataManager: SettingsDataManager
+) : ViewModel() {
     private val _practiceState = MutableStateFlow(BreathePracticeState())
 
-    val settingsState: StateFlow<BreatheSettingsState> = _settingsState.asStateFlow()
+    val settingsFlow: Flow<ProtoNotificationSettings> = settingsDataManager.getSettings()
     val practiceState: StateFlow<BreathePracticeState> = _practiceState.asStateFlow()
     init {
         reset()
     }
 
     private fun reset() {
-        _settingsState.value = BreatheSettingsState() // TODO read from some storage
         _practiceState.value = BreathePracticeState()
     }
 
-    fun saveNotifications(value: Boolean) {
-        _settingsState.update { currentState -> currentState.copy(notifications = value) }
-        // TODO save to some storage
+    fun saveNotifications(value: Boolean) = viewModelScope.launch {
+        settingsDataManager.setEnabled(value)
     }
 
-    fun saveNotifyTimeHours(value: Int) {
-        _settingsState.update { currentState -> currentState.copy(notifyTimeHours = value) }
-        // TODO save to some storage
+    fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
+        settingsDataManager.setTimeHours(value)
     }
 
-    fun saveNotifyTimeMinutes(value: Int) {
-        _settingsState.update { currentState -> currentState.copy(notifyTimeMinutes = value) }
-        // TODO save to some storage
+    fun saveNotifyTimeMinutes(value: Int) = viewModelScope.launch {
+        settingsDataManager.setTimeMinutes(value)
     }
 
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {

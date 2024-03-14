@@ -24,8 +24,8 @@ import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
 fun SettingsLayout(
+    currentSettingsState: ProtoNotificationSettings,
     modifier: Modifier = Modifier,
-    currentSettingsState: BreatheSettingsState = BreatheSettingsState(),
     onNotifyChange: ((Boolean)->Unit)? = null,
     onHoursChange: ((Int)->Unit)? = null,
     onMinutesChange: ((Int)->Unit)? = null,
@@ -55,7 +55,7 @@ fun SettingsLayout(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 Switch(
-                    checked = currentSettingsState.notifications,
+                    checked = currentSettingsState.enabled,
                     onCheckedChange = {
                         if (onNotifyChange != null) onNotifyChange(it)
                     },
@@ -74,7 +74,7 @@ fun SettingsLayout(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 TimeFieldWithText(
-                    defaultValue = currentSettingsState.notifyTimeHours,
+                    defaultValue = currentSettingsState.timeHours,
                     width = 80,
                     text = stringResource(R.string.hrs),
                     onValueChange = {
@@ -82,7 +82,7 @@ fun SettingsLayout(
                     }
                 )
                 TimeFieldWithText(
-                    defaultValue = currentSettingsState.notifyTimeMinutes,
+                    defaultValue = currentSettingsState.timeMinutes,
                     width = 80,
                     text = stringResource(R.string.min),
                     onValueChange = {
@@ -110,6 +110,9 @@ fun SettingsLayout(
 @Composable
 fun SettingsLayoutPreview() {
     BreatheTheme {
-        SettingsLayout(Modifier.fillMaxSize())
+        SettingsLayout(
+            ProtoNotificationSettings.getDefaultInstance(),
+            Modifier.fillMaxSize()
+        )
     }
 }

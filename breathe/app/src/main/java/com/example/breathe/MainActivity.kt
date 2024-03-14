@@ -1,8 +1,10 @@
 package com.example.breathe
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.breathe.ui.theme.BreatheTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 enum class BreatheScreen {
     PracticesList,
@@ -32,8 +35,9 @@ enum class BreatheScreen {
 fun BreatheApp(
     viewModel: BreatheViewModel = viewModel()
 ) {
+
     val navController = rememberNavController()
-    val settingsState by viewModel.settingsState.collectAsState()
+    val settingsState by viewModel.settingsFlow.collectAsState(ProtoNotificationSettings.getDefaultInstance())
     val practiceState by viewModel.practiceState.collectAsState()
     NavHost(
         navController = navController,
@@ -155,12 +159,15 @@ fun BreatheApp(
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val viewModel = BreatheViewModel(SettingsDataManager(applicationContext))
         setContent {
             BreatheTheme {
-                BreatheApp()
+                BreatheApp(viewModel)
             }
         }
     }
