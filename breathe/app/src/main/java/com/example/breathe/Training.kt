@@ -1,5 +1,14 @@
 package com.example.breathe
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +41,51 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.breathe.ui.theme.BreatheTheme
 import kotlinx.coroutines.delay
+
+
+class AccelerometerHandlerClass : AppCompatActivity() {
+    lateinit var sManager: SensorManager
+    lateinit var vibrator: Vibrator
+    public var data: Float? = 0.0F
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        sManager = this.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val sensor = sManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val sListener = object : SensorEventListener{
+            override fun onSensorChanged(sEvent: SensorEvent?) {
+                val value = sEvent?.values  // Ускорения по осям XYZ
+                data =  value?.get(2)       // Ось Z
+            }
+
+            override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+
+            }
+        }
+        sManager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    fun vibrate() {
+        val effect = VibrationEffect.createOneShot(
+            1000, VibrationEffect.DEFAULT_AMPLITUDE
+        )
+        vibrator.vibrate(effect)
+    }
+}
+
+@Composable
+fun AccelerometerHandler(
+    currentPracticeState: BreathePracticeState,
+    modifier: Modifier = Modifier
+) {
+    val accelerometerHandler = AccelerometerHandlerClass()
+    LaunchedEffect(currentPracticeState.currentSeconds) {
+        delay(1000)
+        // Как-то надо сохранить данные для дальнейшего анализа
+    }
+}
 
 @Composable
 fun TrainingLayout(
