@@ -1,16 +1,16 @@
 package com.example.breathe
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-
-data class BreatheSettingsState(
-    val notifications: Boolean = false,
-    val notifyTimeHours: Int = 24,
-    val notifyTimeMinutes: Int = 0,
-)
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class BreathePracticeState(
     val totalSeconds: Int = 0,
@@ -36,34 +36,35 @@ data class BreathePracticeState(
     }
 }
 
-class BreatheViewModel : ViewModel() {
-    private val _settingsState = MutableStateFlow(BreatheSettingsState())
-    private val _practiceState = MutableStateFlow(BreathePracticeState())
+@HiltViewModel
+class BreatheViewModel @Inject constructor(
+    private val dataManager: DataManager
+) : ViewModel() {
+    private val _practiceState  = MutableStateFlow(BreathePracticeState())
+    private val _settingsFlow   = dataManager.getSettings()
+    private val _resultsFlow    = dataManager.getPracticeResults()
 
-    val settingsState: StateFlow<BreatheSettingsState> = _settingsState.asStateFlow()
-    val practiceState: StateFlow<BreathePracticeState> = _practiceState.asStateFlow()
+    val settingsFlow: Flow<ProtoNotificationSettings>   = _settingsFlow
+    val practiceState: StateFlow<BreathePracticeState>  = _practiceState.asStateFlow()
+    val resultsFlow: Flow<ProtoPracticeResultList>      = _resultsFlow
     init {
         reset()
     }
 
     private fun reset() {
-        _settingsState.value = BreatheSettingsState() // TODO read from some storage
         _practiceState.value = BreathePracticeState()
     }
 
-    fun saveNotifications(value: Boolean) {
-        _settingsState.update { currentState -> currentState.copy(notifications = value) }
-        // TODO save to some storage
+    fun saveNotifications(value: Boolean) = viewModelScope.launch {
+        dataManager.setEnabled(value)
     }
 
-    fun saveNotifyTimeHours(value: Int) {
-        _settingsState.update { currentState -> currentState.copy(notifyTimeHours = value) }
-        // TODO save to some storage
+    fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
+        dataManager.setTimeHours(value)
     }
 
-    fun saveNotifyTimeMinutes(value: Int) {
-        _settingsState.update { currentState -> currentState.copy(notifyTimeMinutes = value) }
-        // TODO save to some storage
+    fun saveNotifyTimeMinutes(value: Int) = viewModelScope.launch {
+        dataManager.setTimeMinutes(value)
     }
 
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {
@@ -74,6 +75,10 @@ class BreatheViewModel : ViewModel() {
                 phaseTimes = phaseTimes
             )
         }
+    }
+
+    fun addPracticeResult(id: Int, seconds: Int, phaseTimes: IntArray) = viewModelScope.launch {
+        dataManager.addPracticeResult(id, seconds, phaseTimes)
     }
 
     fun setPracticeMinutes(value: Int) {
@@ -107,8 +112,12 @@ class BreatheViewModel : ViewModel() {
         }
     }
 
-    fun timerEnd() {
-        // TODO save breath statistics to some storage
+    fun timerEnd(id: Int, state: BreathePracticeState) {
+        addPracticeResult(
+            id,
+            state.totalSeconds - state.currentSeconds,
+            state.phaseTimes
+        )
     }
 
     fun timerTick() {
