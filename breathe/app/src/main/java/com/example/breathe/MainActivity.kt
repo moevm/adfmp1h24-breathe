@@ -40,6 +40,8 @@ fun BreatheApp(
     val settingsState by viewModel.settingsFlow.collectAsState(ProtoNotificationSettings.getDefaultInstance())
     val practiceState by viewModel.practiceState.collectAsState()
     val resultsState by viewModel.resultsFlow.collectAsState(ProtoPracticeResultList.getDefaultInstance())
+    val profileState by viewModel.profileFlow.collectAsState(ProtoProfile.getDefaultInstance())
+
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
@@ -118,6 +120,7 @@ fun BreatheApp(
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 TrainingResultLayout(
                     practiceNum = it,
+                    state = practiceState,
                     mainScreenButton = {
                         navController.navigate(BreatheScreen.PracticesList.name) {
                             popUpTo(BreatheScreen.PracticesList.name)
@@ -138,16 +141,17 @@ fun BreatheApp(
         }
         composable(BreatheScreen.Profile.name) {
             ProfileLayout(
+                profileState,
+                resultsState.resultsList,
                 historyButton = { navController.navigate(BreatheScreen.History.name) },
                 upButton = { navController.navigateUp() }
             )
         }
         composable(BreatheScreen.History.name) {
-            HistoryLayout2(
+            HistoryLayout(
                 resultsState.resultsList,
                 upButton = { navController.navigateUp() }
             )
-//            HistoryLayout(upButton = { navController.navigateUp() })
         }
         composable(BreatheScreen.PracticeInfo.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->

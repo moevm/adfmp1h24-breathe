@@ -17,13 +17,13 @@ class DataManager(val context: Context) {
         fileName = "settings.pb",
         serializer = NotificationSettingsSerializer
     )
-    private val Context.practicesDataStore by dataStore(
-        fileName = "practices.pb",
-        serializer = PracticeListSerializer
-    )
     private val Context.practiceResultDataStore by dataStore(
         fileName = "practices_result.pb",
         serializer = PracticeResultListSerializer
+    )
+    private val Context.profileDataStore by dataStore(
+        fileName = "profile.pb",
+        serializer = ProfileSerializer
     )
 
     suspend fun setEnabled(value: Boolean) = context.settingsDataStore.updateData {
@@ -35,26 +35,48 @@ class DataManager(val context: Context) {
     suspend fun setTimeMinutes(value: Int) = context.settingsDataStore.updateData {
         it.toBuilder().setTimeMinutes(value).build()
     }
+    suspend fun setAchievementState(index: Int, state: Boolean) = context.profileDataStore.updateData {
+        it.toBuilder().setAchievements(
+            index,
+            it.getAchievements(index).copy {
+                active = state
+            }
+        ).build()
+    }
+
+    suspend fun appendScore(appendValue: Int) = context.profileDataStore.updateData {
+        it.toBuilder().setScore(it.score + appendValue).build()
+    }
+
+    suspend fun setUsage(daysUsing: Int, lastUsage: Long) = context.profileDataStore.updateData {
+        it.toBuilder().setDaysUsingInRow(daysUsing).setLastUsage(
+            it.lastUsage.toBuilder().setSeconds(lastUsage)
+        ).build()
+    }
 
     suspend fun addPracticeResult(
         id: Int,
         seconds: Int,
-        phaseTimes: IntArray
+        resSeconds: Int,
+        phaseTimes: IntArray,
+        resPhaseTimes: IntArray
     ) = context.practiceResultDataStore.updateData {
         it.toBuilder().addResults(
             ProtoPracticeResult.newBuilder()
                 .setId(id)
                 .setTotal(seconds)
+                .setResTotal(resSeconds)
                 .setEndDate(Timestamp.newBuilder()
                     .setSeconds(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
                 )
                 .addAllPhaseTimes(phaseTimes.toList())
+                .addAllResPhaseTimes(resPhaseTimes.toList())
                 .build()
         ).build()
     }
 
     fun getSettings()           = context.settingsDataStore.data
-    fun getPractices()          = context.practicesDataStore.data
     fun getPracticeResults()    = context.practiceResultDataStore.data
+    fun getProfile()            = context.profileDataStore.data
 
 }

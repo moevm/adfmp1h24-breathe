@@ -23,22 +23,6 @@ object NotificationSettingsSerializer : Serializer<ProtoNotificationSettings> {
 }
 
 @Suppress("BlockingMethodInNonBlockingContext")
-object PracticeListSerializer : Serializer<ProtoPracticeList> {
-    override val defaultValue: ProtoPracticeList = ProtoPracticeList.getDefaultInstance()
-
-    override suspend fun readFrom(input: InputStream): ProtoPracticeList {
-        return try {
-            ProtoPracticeList.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
-            Log.e("PRACTICE LIST", "Cannot read proto. Create default.")
-            defaultValue
-        }
-    }
-
-    override suspend fun writeTo(t: ProtoPracticeList, output: OutputStream) = t.writeTo(output)
-}
-
-@Suppress("BlockingMethodInNonBlockingContext")
 object PracticeResultListSerializer : Serializer<ProtoPracticeResultList> {
     override val defaultValue: ProtoPracticeResultList = ProtoPracticeResultList.getDefaultInstance()
 
@@ -52,4 +36,20 @@ object PracticeResultListSerializer : Serializer<ProtoPracticeResultList> {
     }
 
     override suspend fun writeTo(t: ProtoPracticeResultList, output: OutputStream) = t.writeTo(output)
+}
+
+@Suppress("BlockingMethodInNonBlockingContext")
+object ProfileSerializer : Serializer<ProtoProfile> {
+    override val defaultValue: ProtoProfile = ProtoProfile.getDefaultInstance()
+
+    override suspend fun readFrom(input: InputStream): ProtoProfile {
+        return try {
+            ProtoProfile.parseFrom(input)
+        } catch (exception: InvalidProtocolBufferException) {
+            Log.e("PROFILE", "Cannot read proto. Create default.")
+            defaultValue
+        }
+    }
+
+    override suspend fun writeTo(t: ProtoProfile, output: OutputStream) = t.writeTo(output)
 }

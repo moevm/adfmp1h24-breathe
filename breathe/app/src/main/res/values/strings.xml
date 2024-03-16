@@ -78,6 +78,16 @@
         <item>Год</item>
     </string-array>
 
+    <string-array name="achievements_list">
+        <item>1</item>
+        <item>7</item>
+        <item>14</item>
+        <item>21</item>
+        <item>30</item>
+        <item>6м</item>
+        <item>Год</item>
+    </string-array>
+
     <string name="achievements_title">Достижения</string>
     <string name="level_header">Уровень %d</string>
 
