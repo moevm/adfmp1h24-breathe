@@ -39,6 +39,7 @@ fun BreatheApp(
     val navController = rememberNavController()
     val settingsState by viewModel.settingsFlow.collectAsState(ProtoNotificationSettings.getDefaultInstance())
     val practiceState by viewModel.practiceState.collectAsState()
+    val resultsState by viewModel.resultsFlow.collectAsState(ProtoPracticeResultList.getDefaultInstance())
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
@@ -97,10 +98,13 @@ fun BreatheApp(
                 TrainingLayout(
                     practiceNum = it,
                     currentPracticeState = practiceState,
-                    stopButton = goToResult,
+                    stopButton = {
+                        viewModel.timerEnd(it, practiceState)
+                        goToResult()
+                    },
                     onTimerTick = { viewModel.timerTick() },
                     onTimerEnd = {
-                        viewModel.timerEnd()
+                        viewModel.timerEnd(it, practiceState)
                         goToResult()
                     }
                 )
@@ -139,7 +143,11 @@ fun BreatheApp(
             )
         }
         composable(BreatheScreen.History.name) {
-            HistoryLayout(upButton = { navController.navigateUp() })
+            HistoryLayout2(
+                resultsState.resultsList,
+                upButton = { navController.navigateUp() }
+            )
+//            HistoryLayout(upButton = { navController.navigateUp() })
         }
         composable(BreatheScreen.PracticeInfo.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
@@ -164,7 +172,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel = BreatheViewModel(SettingsDataManager(applicationContext))
+        val viewModel = BreatheViewModel(DataManager(applicationContext))
         setContent {
             BreatheTheme {
                 BreatheApp(viewModel)

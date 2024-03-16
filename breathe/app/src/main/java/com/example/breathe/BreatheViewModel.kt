@@ -1,5 +1,6 @@
 package com.example.breathe
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,12 +38,15 @@ data class BreathePracticeState(
 
 @HiltViewModel
 class BreatheViewModel @Inject constructor(
-    private val settingsDataManager: SettingsDataManager
+    private val dataManager: DataManager
 ) : ViewModel() {
-    private val _practiceState = MutableStateFlow(BreathePracticeState())
+    private val _practiceState  = MutableStateFlow(BreathePracticeState())
+    private val _settingsFlow   = dataManager.getSettings()
+    private val _resultsFlow    = dataManager.getPracticeResults()
 
-    val settingsFlow: Flow<ProtoNotificationSettings> = settingsDataManager.getSettings()
-    val practiceState: StateFlow<BreathePracticeState> = _practiceState.asStateFlow()
+    val settingsFlow: Flow<ProtoNotificationSettings>   = _settingsFlow
+    val practiceState: StateFlow<BreathePracticeState>  = _practiceState.asStateFlow()
+    val resultsFlow: Flow<ProtoPracticeResultList>      = _resultsFlow
     init {
         reset()
     }
@@ -52,15 +56,15 @@ class BreatheViewModel @Inject constructor(
     }
 
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
-        settingsDataManager.setEnabled(value)
+        dataManager.setEnabled(value)
     }
 
     fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
-        settingsDataManager.setTimeHours(value)
+        dataManager.setTimeHours(value)
     }
 
     fun saveNotifyTimeMinutes(value: Int) = viewModelScope.launch {
-        settingsDataManager.setTimeMinutes(value)
+        dataManager.setTimeMinutes(value)
     }
 
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {
@@ -71,6 +75,10 @@ class BreatheViewModel @Inject constructor(
                 phaseTimes = phaseTimes
             )
         }
+    }
+
+    fun addPracticeResult(id: Int, seconds: Int, phaseTimes: IntArray) = viewModelScope.launch {
+        dataManager.addPracticeResult(id, seconds, phaseTimes)
     }
 
     fun setPracticeMinutes(value: Int) {
@@ -104,8 +112,12 @@ class BreatheViewModel @Inject constructor(
         }
     }
 
-    fun timerEnd() {
-        // TODO save breath statistics to some storage
+    fun timerEnd(id: Int, state: BreathePracticeState) {
+        addPracticeResult(
+            id,
+            state.totalSeconds - state.currentSeconds,
+            state.phaseTimes
+        )
     }
 
     fun timerTick() {
