@@ -1,10 +1,8 @@
 package com.example.breathe
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -179,7 +177,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel = BreatheViewModel(DataManager(applicationContext))
+        val viewModel = BreatheViewModel(
+            AccelerometerHandler(this),
+            DataManager(applicationContext)
+        )
         setContent {
             BreatheTheme {
                 BreatheApp(viewModel)

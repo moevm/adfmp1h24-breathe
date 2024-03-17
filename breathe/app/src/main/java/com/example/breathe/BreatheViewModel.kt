@@ -1,6 +1,5 @@
 package com.example.breathe
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,37 +7,38 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
-import kotlin.random.Random
 
 data class BreathePracticeState(
+    val waitSeconds: Int = 5,
     val totalSeconds: Int = 0,
     val currentSeconds: Int = 0,
     val phaseTimes: IntArray = IntArray(4),
     val currentPhaseTimes: IntArray = IntArray(4)
 ) {
+    override fun hashCode(): Int {
+        var result = waitSeconds
+        result = 31 * result + totalSeconds
+        result = 31 * result + currentSeconds
+        result = 31 * result + phaseTimes.contentHashCode()
+        result = 31 * result + currentPhaseTimes.contentHashCode()
+        return result
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as BreathePracticeState
 
+        if (waitSeconds != other.waitSeconds) return false
         if (totalSeconds != other.totalSeconds) return false
         if (currentSeconds != other.currentSeconds) return false
         if (!phaseTimes.contentEquals(other.phaseTimes)) return false
         return currentPhaseTimes.contentEquals(other.currentPhaseTimes)
-    }
-
-    override fun hashCode(): Int {
-        var result = totalSeconds
-        result = 31 * result + currentSeconds
-        result = 31 * result + phaseTimes.contentHashCode()
-        result = 31 * result + currentPhaseTimes.contentHashCode()
-        return result
     }
 }
 
@@ -61,6 +61,7 @@ data class BreatheFilterState(
 
 @HiltViewModel
 class BreatheViewModel @Inject constructor(
+    private val accelerometer: AccelerometerHandler,
     private val dataManager: DataManager
 ) : ViewModel() {
     private val _practiceState  = MutableStateFlow(BreathePracticeState())
@@ -79,6 +80,7 @@ class BreatheViewModel @Inject constructor(
     }
 
     private fun reset() {
+        accelerometer.unregister()
         _practiceState.value = BreathePracticeState()
         _filterState.value = BreatheFilterState()
     }
@@ -98,15 +100,11 @@ class BreatheViewModel @Inject constructor(
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {
         _practiceState.update { currentState ->
             currentState.copy(
+                waitSeconds = 5,
                 totalSeconds = seconds,
                 currentSeconds = seconds,
                 phaseTimes = phaseTimes,
-                currentPhaseTimes = listOf(
-                    Random.nextInt(0, 4),
-                    Random.nextInt(0, 4),
-                    Random.nextInt(3, 12),
-                    Random.nextInt(3, 12)
-                ).toIntArray() // TODO
+                currentPhaseTimes = IntArray(4)
             )
         }
     }
@@ -117,7 +115,7 @@ class BreatheViewModel @Inject constructor(
         }
     }
 
-    fun addPracticeResult(
+    private fun addPracticeResult(
         id: Int,
         seconds: Int,
         resSeconds: Int,
@@ -182,6 +180,7 @@ class BreatheViewModel @Inject constructor(
     }
 
     fun timerEnd(id: Int, state: BreathePracticeState) {
+        accelerometer.unregister()
         addPracticeResult(
             id,
             state.totalSeconds,
@@ -200,11 +199,25 @@ class BreatheViewModel @Inject constructor(
     }
 
     fun timerTick() {
-        // TODO handle breathe phases with hardware
-        if (_practiceState.value.currentSeconds > 0) {
+        if (_practiceState.value.currentSeconds <= 0) {
+            return
+        }
+        val waitSeconds = _practiceState.value.waitSeconds
+        if (waitSeconds > 0) {
             _practiceState.update { currentState ->
-                currentState.copy(currentSeconds = currentState.currentSeconds - 1)
+                currentState.copy(waitSeconds = waitSeconds - 1)
             }
+            if (waitSeconds == 1) {
+                accelerometer.unregister()
+                accelerometer.register()
+            }
+            return
+        }
+        val newSeconds = _practiceState.value.currentSeconds - 1
+
+
+        _practiceState.update { currentState ->
+            currentState.copy(currentSeconds = newSeconds)
         }
     }
 }
