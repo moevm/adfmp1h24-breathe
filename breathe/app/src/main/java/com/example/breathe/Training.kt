@@ -79,7 +79,8 @@ fun TrainingTimer(
 ) {
     val minutes = currentPracticeState.currentSeconds / 60
     val seconds = currentPracticeState.currentSeconds % 60
-    LaunchedEffect(currentPracticeState.currentSeconds) {
+    val waitSeconds = currentPracticeState.waitSeconds
+    LaunchedEffect(currentPracticeState.currentSeconds + waitSeconds) {
         delay(1000)
         if (currentPracticeState.currentSeconds <= 0 && onTimerEnd != null) {
             onTimerEnd()
@@ -110,8 +111,13 @@ fun TrainingTimer(
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TimerDisplay(minutes, stringResource(R.string.min))
-            TimerDisplay(seconds, stringResource(R.string.sec))
+            if (waitSeconds == 0) {
+                TimerDisplay(minutes, stringResource(R.string.min))
+                TimerDisplay(seconds, stringResource(R.string.sec))
+            }
+            else {
+                TimerDisplay(waitSeconds, stringResource(R.string.sec))
+            }
         }
     }
 }
