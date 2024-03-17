@@ -80,6 +80,7 @@ class BreatheViewModel @Inject constructor(
 
     private var defaultAccelerationZ : Float = 0.0f
     private var currPhaseNum: Int = 0
+    private var currPhaseDur: Int = 0
     private var phaseRepeats: IntArray= IntArray(4)
     private var currPhaseTimes: IntArray= IntArray(4)
 
@@ -91,6 +92,7 @@ class BreatheViewModel @Inject constructor(
         accelerometer.unregister()
         defaultAccelerationZ = 0.0f
         currPhaseNum = 0
+        currPhaseDur = 0
         phaseRepeats = IntArray(4)
         currPhaseTimes = IntArray(4)
         _practiceState.value = BreathePracticeState()
@@ -226,17 +228,20 @@ class BreatheViewModel @Inject constructor(
             _practiceState.update { currentState ->
                 currentState.copy(waitSeconds = waitSeconds - 1)
             }
-            if (waitSeconds == 1) {     // перед самим стартом упражнения
+            if (waitSeconds == 2) {     // за 2с перед самим стартом упражнения, калибровка датчика
                 accelerometer.unregister()
                 accelerometer.register()
+            }
+            else if (waitSeconds == 1) { // за 1 с перед стартом
                 currPhaseNum = 0
+                currPhaseDur = 0
                 defaultAccelerationZ = accelerometer.data
                 phaseRepeats = IntArray(4)
                 currPhaseTimes = IntArray(4)
             }
             return
         }
-        val accelerationThreshold = 1e-5f
+        val accelerationThreshold = 0.01f
         val newSeconds = currentSeconds - 1
         val currAccelerationZ = accelerometer.data
         val prevPhaseNum = currPhaseNum
@@ -247,16 +252,18 @@ class BreatheViewModel @Inject constructor(
         {
             currPhaseNum = 2    // выдох
         }
-        else if (currPhaseNum % 2 == 0) {
+        else if (prevPhaseNum % 2 == 0) {
             currPhaseNum++    // удержание
         }
 
         currPhaseTimes[currPhaseNum] += 1
-        if (_practiceState.value.phaseTimes[currPhaseNum] == currPhaseTimes[currPhaseNum]) {
+        currPhaseDur += 1
+        if (currPhaseDur == _practiceState.value.phaseTimes[currPhaseNum]) {
             indicateSuccess()
         }
         if (prevPhaseNum != currPhaseNum) {
             phaseRepeats[currPhaseNum] += 1
+            currPhaseDur = 1
         }
 
         _practiceState.update { currentState ->
