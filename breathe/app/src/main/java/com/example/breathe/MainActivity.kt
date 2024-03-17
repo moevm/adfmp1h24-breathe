@@ -1,8 +1,10 @@
 package com.example.breathe
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.breathe.ui.theme.BreatheTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 enum class BreatheScreen {
     PracticesList,
@@ -32,9 +35,14 @@ enum class BreatheScreen {
 fun BreatheApp(
     viewModel: BreatheViewModel = viewModel()
 ) {
+
     val navController = rememberNavController()
-    val settingsState by viewModel.settingsState.collectAsState()
     val practiceState by viewModel.practiceState.collectAsState()
+    val filterState by viewModel.filterState.collectAsState()
+    val settingsState by viewModel.settingsFlow.collectAsState(ProtoNotificationSettings.getDefaultInstance())
+    val resultsState by viewModel.resultsFlow.collectAsState(ProtoPracticeResultList.getDefaultInstance())
+    val profileState by viewModel.profileFlow.collectAsState(ProtoProfile.getDefaultInstance())
+
     NavHost(
         navController = navController,
         startDestination = BreatheScreen.PracticesList.name,
@@ -93,10 +101,13 @@ fun BreatheApp(
                 TrainingLayout(
                     practiceNum = it,
                     currentPracticeState = practiceState,
-                    stopButton = goToResult,
+                    stopButton = {
+                        viewModel.timerEnd(it, practiceState)
+                        goToResult()
+                    },
                     onTimerTick = { viewModel.timerTick() },
                     onTimerEnd = {
-                        viewModel.timerEnd()
+                        viewModel.timerEnd(it, practiceState)
                         goToResult()
                     }
                 )
@@ -110,6 +121,7 @@ fun BreatheApp(
             backStackEntry.arguments?.getInt(practiceNumArg)?.let {
                 TrainingResultLayout(
                     practiceNum = it,
+                    state = practiceState,
                     mainScreenButton = {
                         navController.navigate(BreatheScreen.PracticesList.name) {
                             popUpTo(BreatheScreen.PracticesList.name)
@@ -130,12 +142,19 @@ fun BreatheApp(
         }
         composable(BreatheScreen.Profile.name) {
             ProfileLayout(
+                profileState,
+                resultsState.resultsList,
                 historyButton = { navController.navigate(BreatheScreen.History.name) },
                 upButton = { navController.navigateUp() }
             )
         }
         composable(BreatheScreen.History.name) {
-            HistoryLayout(upButton = { navController.navigateUp() })
+            HistoryLayout(
+                resultsState.resultsList,
+                upButton = { navController.navigateUp() },
+                filter = filterState.historyFilter,
+                filterChange = { viewModel.setFilter(it) }
+            )
         }
         composable(BreatheScreen.PracticeInfo.name + practiceNumUrl, arguments = arguments) {
             backStackEntry ->
@@ -155,12 +174,15 @@ fun BreatheApp(
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val viewModel = BreatheViewModel(DataManager(applicationContext))
         setContent {
             BreatheTheme {
-                BreatheApp()
+                BreatheApp(viewModel)
             }
         }
     }

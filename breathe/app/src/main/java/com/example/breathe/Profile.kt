@@ -1,5 +1,6 @@
 package com.example.breathe
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +14,8 @@ import com.example.breathe.ui.theme.BreatheTheme
 
 @Composable
 fun ProfileLayout(
+    profile: ProtoProfile,
+    results: List<ProtoPracticeResult>,
     modifier: Modifier = Modifier,
     historyButton: (()->Unit)? = null,
     upButton: (()->Unit)? = null
@@ -22,9 +25,24 @@ fun ProfileLayout(
         color = MaterialTheme.colorScheme.background
     ) {
         val chartLabels: List<String> = stringArrayResource(R.array.chart_labels).asList()
-        val values = listOf(3.0f, 4.0f, 6.0f, 8.0f)
-        val expected = listOf(4.0f, 4.0f, 4.0f, 4.0f)
-        val level = 17
+        val values = mutableListOf<Float>()
+        val expected = mutableListOf<Float>()
+        for (i in 0..<4) {
+            values.add(results.sumOf { it.resPhaseTimesList[i].toDouble() }.toFloat() / results.size)
+            expected.add(results.sumOf { it.phaseTimesList[i].toDouble() }.toFloat() / results.size)
+        }
+
+        val scorePerLevel = 1000
+        val level = profile.score / scorePerLevel
+        val currentScore = profile.score % scorePerLevel
+
+        val predicate = { name: String ->
+            profile.achievementsList
+                .find { achievement -> (achievement.name == name) }
+                ?.active == true
+        }
+        val activeAchievements = stringArrayResource(R.array.achievements_list).filter( predicate )
+        val inactiveAchievements = stringArrayResource(R.array.achievements_list).filter{ !predicate(it) }
 
         Column(
             modifier = modifier
@@ -35,14 +53,14 @@ fun ProfileLayout(
                 secondButton = historyButton
             )
             ProgressBarWithText(
-                0.7f,
+                currentScore / scorePerLevel.toFloat(),
                 0.toString(),
-                450.toString(),
+                scorePerLevel.toString(),
                 headerText = stringResource(R.string.level_header, level)
             )
             AchievementsCard(
-                stringArrayResource(R.array.achievements_active).asList(),
-                stringArrayResource(R.array.achievements_inactive).asList(),
+                activeAchievements,
+                inactiveAchievements,
                 headerText = stringResource(R.string.achievements_title)
             )
             StatisticsChart(
@@ -60,6 +78,10 @@ fun ProfileLayout(
 @Composable
 fun ProfileLayoutPreview() {
     BreatheTheme {
-        ProfileLayout(modifier = Modifier.fillMaxSize())
+        ProfileLayout(
+            ProtoProfile.getDefaultInstance(),
+            listOf(),
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

@@ -15,6 +15,7 @@ import com.example.breathe.ui.theme.BreatheTheme
 @Composable
 fun TrainingResultLayout(
     practiceNum: Int,
+    state: BreathePracticeState,
     modifier: Modifier = Modifier,
     mainScreenButton: (() -> Unit)? = null
 ) {
@@ -23,8 +24,6 @@ fun TrainingResultLayout(
         color = MaterialTheme.colorScheme.background
     ) {
         val chartLabels: List<String> = stringArrayResource(R.array.chart_labels).asList()
-        val values = listOf(3.0f, 4.0f, 6.0f, 8.0f)
-        val expected = listOf(4.0f, 4.0f, 4.0f, 4.0f)
 
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -34,8 +33,8 @@ fun TrainingResultLayout(
                 TrainingHeader(practiceNum)
                 StatisticsChart(
                     chartLabels,
-                    values,
-                    expected,
+                    state.currentPhaseTimes.map{ it.toFloat() }.toList(),
+                    state.phaseTimes.map{ it.toFloat() }.toList(),
                     4,
                     headerText = stringResource(R.string.training_results_header)
                 )
@@ -53,6 +52,10 @@ fun TrainingResultLayout(
 @Composable
 fun TrainingResultPreview() {
     BreatheTheme {
-        TrainingResultLayout(1, modifier = Modifier.fillMaxSize())
+        TrainingResultLayout(
+            1,
+            BreathePracticeState(),
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
