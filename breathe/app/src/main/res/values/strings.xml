@@ -122,4 +122,6 @@
     <string name="min">мин</string>
     <string name="sec">с</string>
     <string name="filter_title">Введите фильтр</string>
+    <string name="notification_title">Нужно подышать</string>
+    <string name="notification_text">Пойдем, выйдем, подышим</string>
 </resources>

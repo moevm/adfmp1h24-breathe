@@ -1,15 +1,15 @@
 package com.example.breathe
 
-import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -35,7 +35,6 @@ enum class BreatheScreen {
 fun BreatheApp(
     viewModel: BreatheViewModel = viewModel()
 ) {
-
     val navController = rememberNavController()
     val practiceState by viewModel.practiceState.collectAsState()
     val filterState by viewModel.filterState.collectAsState()
@@ -179,6 +178,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        createNotificationChannel(applicationContext)
         val viewModel = BreatheViewModel(DataManager(applicationContext))
         setContent {
             BreatheTheme {

@@ -96,16 +96,32 @@ class BreatheViewModel @Inject constructor(
         _filterState.value = BreatheFilterState()
     }
 
+    private fun updateNotifications() = viewModelScope.launch {
+        val data  = _settingsFlow.first()
+        val title = _resources.getString(R.string.notification_title)
+        val text  = _resources.getString(R.string.notification_text)
+        if (data.enabled) {
+            checkNotifications(dataManager.context)
+            val interval = (60 * data.timeHours + data.timeMinutes) * 1000.toLong()
+            scheduleNotification(dataManager.context, interval, title, text)
+        } else {
+            cancelNotification(dataManager.context, title, text)
+        }
+    }
+
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
         dataManager.setEnabled(value)
+        updateNotifications()
     }
 
     fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
         dataManager.setTimeHours(value)
+        updateNotifications()
     }
 
     fun saveNotifyTimeMinutes(value: Int) = viewModelScope.launch {
         dataManager.setTimeMinutes(value)
+        updateNotifications()
     }
 
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {

@@ -1,7 +1,6 @@
 package com.example.breathe
 
 import android.icu.text.SimpleDateFormat
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.breathe.ui.theme.BreatheTheme
-import java.text.DateFormat.getDateInstance
 import java.util.Locale
 
 @Composable
