@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Star
@@ -19,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -108,7 +111,9 @@ fun HistoryCard(
 fun HistoryLayout(
     practices: List<ProtoPracticeResult>,
     modifier: Modifier = Modifier,
-    upButton: (()->Unit)? = null
+    upButton: (()->Unit)? = null,
+    filter: String = "",
+    filterChange: ((String)->Unit)? = null
 ) {
     Surface(
         modifier = modifier,
@@ -117,16 +122,27 @@ fun HistoryLayout(
         Column(modifier = modifier)
         {
             BackHeader(title = stringResource(R.string.history), upButton = upButton)
+            OutlinedTextField(
+                value = filter,
+                onValueChange = { if (filterChange != null) filterChange(it) },
+                label = { Text(stringResource(R.string.filter_title)) },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search)
+            )
             val practiceGroups = mutableMapOf<Long, MutableList<ProtoPracticeResult>>()
             val secsInDay = 60 * 60 * 24
 
+            val names = stringArrayResource(R.array.exercise_name)
             for (practice in practices) {
                 val key = (practice.endDate.seconds / secsInDay) * secsInDay
-                if (!practiceGroups.contains(key))
-                {
-                    practiceGroups[key] = mutableListOf()
+                if (names[practice.id].contains(filter, true)) {
+                    if (!practiceGroups.contains(key)) {
+                        practiceGroups[key] = mutableListOf()
+                    }
+                    practiceGroups[key]?.add(practice)
                 }
-                practiceGroups[key]?.add(practice)
             }
 
             val dates = mutableListOf<String>()

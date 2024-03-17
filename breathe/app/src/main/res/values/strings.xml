@@ -121,4 +121,5 @@
     <string name="hrs">ч</string>
     <string name="min">мин</string>
     <string name="sec">с</string>
+    <string name="filter_title">Введите фильтр</string>
 </resources>

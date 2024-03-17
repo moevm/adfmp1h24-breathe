@@ -37,8 +37,9 @@ fun BreatheApp(
 ) {
 
     val navController = rememberNavController()
-    val settingsState by viewModel.settingsFlow.collectAsState(ProtoNotificationSettings.getDefaultInstance())
     val practiceState by viewModel.practiceState.collectAsState()
+    val filterState by viewModel.filterState.collectAsState()
+    val settingsState by viewModel.settingsFlow.collectAsState(ProtoNotificationSettings.getDefaultInstance())
     val resultsState by viewModel.resultsFlow.collectAsState(ProtoPracticeResultList.getDefaultInstance())
     val profileState by viewModel.profileFlow.collectAsState(ProtoProfile.getDefaultInstance())
 
@@ -150,7 +151,9 @@ fun BreatheApp(
         composable(BreatheScreen.History.name) {
             HistoryLayout(
                 resultsState.resultsList,
-                upButton = { navController.navigateUp() }
+                upButton = { navController.navigateUp() },
+                filter = filterState.historyFilter,
+                filterChange = { viewModel.setFilter(it) }
             )
         }
         composable(BreatheScreen.PracticeInfo.name + practiceNumUrl, arguments = arguments) {

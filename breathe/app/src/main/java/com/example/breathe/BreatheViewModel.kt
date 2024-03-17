@@ -42,17 +42,36 @@ data class BreathePracticeState(
     }
 }
 
+data class BreatheFilterState(
+    val historyFilter: String = ""
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as BreatheFilterState
+
+        return historyFilter.contentEquals(other.historyFilter)
+    }
+
+    override fun hashCode(): Int {
+        return historyFilter.hashCode()
+    }
+}
+
 @HiltViewModel
 class BreatheViewModel @Inject constructor(
     private val dataManager: DataManager
 ) : ViewModel() {
     private val _practiceState  = MutableStateFlow(BreathePracticeState())
+    private val _filterState    = MutableStateFlow(BreatheFilterState())
     private val _settingsFlow   = dataManager.getSettings()
     private val _resultsFlow    = dataManager.getPracticeResults()
     private val _profileFlow    = dataManager.getProfile()
 
-    val settingsFlow: Flow<ProtoNotificationSettings>   = _settingsFlow
     val practiceState: StateFlow<BreathePracticeState>  = _practiceState.asStateFlow()
+    val filterState: StateFlow<BreatheFilterState>      = _filterState.asStateFlow()
+    val settingsFlow: Flow<ProtoNotificationSettings>   = _settingsFlow
     val resultsFlow: Flow<ProtoPracticeResultList>      = _resultsFlow
     val profileFlow: Flow<ProtoProfile>                 = _profileFlow
     init {
@@ -61,6 +80,7 @@ class BreatheViewModel @Inject constructor(
 
     private fun reset() {
         _practiceState.value = BreathePracticeState()
+        _filterState.value = BreatheFilterState()
     }
 
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
@@ -88,6 +108,12 @@ class BreatheViewModel @Inject constructor(
                     Random.nextInt(3, 12)
                 ).toIntArray() // TODO
             )
+        }
+    }
+
+    fun setFilter(filter: String) {
+        _filterState.update { currentState ->
+            currentState.copy(historyFilter = filter)
         }
     }
 
