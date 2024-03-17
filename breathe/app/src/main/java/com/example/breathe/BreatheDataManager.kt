@@ -44,6 +44,10 @@ class DataManager(val context: Context) {
         ).build()
     }
 
+    suspend fun setAchievements(achievements: List<ProtoAchievement>) = context.profileDataStore.updateData {
+        it.toBuilder().clearAchievements().addAllAchievements(achievements).build()
+    }
+
     suspend fun appendScore(appendValue: Int) = context.profileDataStore.updateData {
         it.toBuilder().setScore(it.score + appendValue).build()
     }
