@@ -22,7 +22,7 @@ class AccelerometerHandler(ctx: Context) {
             override fun onSensorChanged(sEvent: SensorEvent?) {
                 val value = sEvent?.values  // Ускорения по осям XYZ
                 if (value != null) {
-                    data = value[2]       // Ось Z
+                    data = value[1]       // Ось Y, а не Z, потому что устройство лежит
                 }
             }
 

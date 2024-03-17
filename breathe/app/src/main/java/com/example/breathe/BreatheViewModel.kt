@@ -77,7 +77,7 @@ class BreatheViewModel @Inject constructor(
     val profileFlow: Flow<ProtoProfile>                 = _profileFlow
 
     private var defaultAccelerationZ : Float = 0.0f
-    private var currPhaseNum: Int = 3
+    private var currPhaseNum: Int = 0
     private var phaseRepeats: IntArray= IntArray(4)
     private var currPhaseTimes: IntArray= IntArray(4)
 
@@ -88,7 +88,7 @@ class BreatheViewModel @Inject constructor(
     private fun reset() {
         accelerometer.unregister()
         defaultAccelerationZ = 0.0f
-        currPhaseNum = 3
+        currPhaseNum = 0
         phaseRepeats = IntArray(4)
         currPhaseTimes = IntArray(4)
         _practiceState.value = BreathePracticeState()
@@ -193,7 +193,12 @@ class BreatheViewModel @Inject constructor(
         accelerometer.unregister()
         var modifier = 1.0f
         for (i in 0..<4) {
-            state.currentPhaseTimes[i] = currPhaseTimes[i] / phaseRepeats[i]
+            if (phaseRepeats[i] > 0) {
+                state.currentPhaseTimes[i] = currPhaseTimes[i] / phaseRepeats[i]
+            }
+            else {
+                state.currentPhaseTimes[i] = 0
+            }
             modifier *= 1.0f - (abs(state.currentPhaseTimes[i] - state.phaseTimes[i])
                     / state.phaseTimes[i].toFloat()).coerceIn(0.0f, 1.0f)
         }
@@ -222,31 +227,32 @@ class BreatheViewModel @Inject constructor(
             if (waitSeconds == 1) {     // перед самим стартом упражнения
                 accelerometer.unregister()
                 accelerometer.register()
-                currPhaseNum = 3
+                currPhaseNum = 0
                 defaultAccelerationZ = accelerometer.data
                 phaseRepeats = IntArray(4)
                 currPhaseTimes = IntArray(4)
             }
             return
         }
+        val accelerationThreshold = 1e-5f
         val newSeconds = currentSeconds - 1
         val currAccelerationZ = accelerometer.data
         val prevPhaseNum = currPhaseNum
-        if (currAccelerationZ > defaultAccelerationZ) {
-            currPhaseNum = 1    // вдох
+        if (currAccelerationZ - defaultAccelerationZ > accelerationThreshold) {
+            currPhaseNum = 0    // вдох
         }
-        else if (currAccelerationZ < defaultAccelerationZ)
+        else if (currAccelerationZ - defaultAccelerationZ < -accelerationThreshold)
         {
-            currPhaseNum = 3    // выдох
+            currPhaseNum = 2    // выдох
         }
-        else if (prevPhaseNum == 1) {
-            currPhaseNum = 2    // удержание после вдоха
-        }
-        else if (prevPhaseNum == 3) {
-            currPhaseNum = 0    // удержание после выдоха или начальное
+        else if (currPhaseNum % 2 == 0) {
+            currPhaseNum++    // удержание
         }
 
         currPhaseTimes[currPhaseNum] += 1
+        if (_practiceState.value.phaseTimes[currPhaseNum] == currPhaseTimes[currPhaseNum]) {
+            indicateSuccess()
+        }
         if (prevPhaseNum != currPhaseNum) {
             phaseRepeats[currPhaseNum] += 1
         }
@@ -254,5 +260,9 @@ class BreatheViewModel @Inject constructor(
         _practiceState.update { currentState ->
             currentState.copy(currentSeconds = newSeconds)
         }
+    }
+
+    private fun indicateSuccess() {
+
     }
 }
