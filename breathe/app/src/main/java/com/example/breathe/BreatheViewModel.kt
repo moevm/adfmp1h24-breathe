@@ -131,7 +131,7 @@ class BreatheViewModel @Inject constructor(
         profileFlow.collect { lastUsage = it.lastUsage.seconds }
 
         /// Вход на следующий день
-        if ((lastUsage / secondsInDay - 1) == (currentUsage / secondsInDay)) {
+        if ((lastUsage / secondsInDay) == (currentUsage / secondsInDay - 1)) {
             profileFlow.collect { daysUsage += 1 }
             dataManager.appendScore(100)
         }
