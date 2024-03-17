@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Star
@@ -19,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,131 +39,11 @@ import java.util.Locale
 
 @Composable
 fun HistoryCard(
-    training: Array<Int>,
-    time: Array<Int>,
-    date: Array<Int>,
-    modifier: Modifier = Modifier
-) {
-    OutlinedCard(
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            contentColor = MaterialTheme.colorScheme.secondary
-        ),
-        modifier = modifier.padding(10.dp, 30.dp, 10.dp, 0.dp)
-    ) {
-        Text(
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleSmall,
-            textAlign = TextAlign.Left,
-            text = date[0].toString() + " "
-                    + stringArrayResource(R.array.months)[date[1]] + " "
-                    + date[2].toString() + " "
-                    + stringResource(R.string.year),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(30.dp)
-                .padding(15.dp, 3.dp, 0.dp, 5.dp)
-        )
-        LazyColumn (
-            verticalArrangement = Arrangement.Top,
-            userScrollEnabled = true,
-            modifier = modifier
-                .height(60.dp)
-                .padding(15.dp, 10.dp, 15.dp, 5.dp)
-        ) {
-            items(training.size) {
-                Row {
-                    Icon(
-                        Icons.Outlined.Star,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.scale(0.5F)
-                    )
-                    Text(
-                        text = stringArrayResource(R.array.exercise_name)[training[it]]
-                    )
-                }
-            }
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier
-        )
-        {
-            Icon(
-                Icons.Outlined.Info,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp)
-            )
-            Text(
-                text = time[0].toString() + " мин " + time[1].toString() + " с",
-                modifier = Modifier.padding(15.dp, 10.dp, 0.dp, 10.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun HistoryLayout(
-    modifier: Modifier = Modifier,
-    upButton: (()->Unit)? = null,
-    
-) {
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(modifier = modifier)
-        {
-            BackHeader(title = stringResource(R.string.history), upButton = upButton)
-            val numbers = (0..3).toList()
-            val dates = arrayOf(
-                arrayOf(25, 1, 2023),
-                arrayOf(24, 1, 2023),
-                arrayOf(23, 1, 2023),
-                arrayOf(22, 1, 2023)
-            )
-            val trainings = arrayOf(
-                arrayOf(1, 2),
-                arrayOf(0, 3),
-                arrayOf(0, 2),
-                arrayOf(1)
-            )
-            val trainingTimes = arrayOf(
-                arrayOf(42, 14),
-                arrayOf(17, 1),
-                arrayOf(97, 45),
-                arrayOf(0, 19)
-            )
-            LazyColumn (
-                verticalArrangement = Arrangement.Top,
-                userScrollEnabled = true,
-                modifier = modifier
-            ) {
-                items(numbers.size) {
-                    HistoryCard(
-                        training = trainings[it],
-                        time = trainingTimes[it],
-                        date = dates[it],
-                        modifier = modifier
-                    )
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun HistoryCard2(
     results: List<ProtoPracticeResult>,
     date: String,
     modifier: Modifier = Modifier
 ) {
-    val totalTime = results.sumOf { it.total }
+    val totalTime = results.sumOf { it.resTotal }
 
     OutlinedCard(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
@@ -225,10 +108,12 @@ fun HistoryCard2(
 }
 
 @Composable
-fun HistoryLayout2(
+fun HistoryLayout(
     practices: List<ProtoPracticeResult>,
     modifier: Modifier = Modifier,
-    upButton: (()->Unit)? = null
+    upButton: (()->Unit)? = null,
+    filter: String = "",
+    filterChange: ((String)->Unit)? = null
 ) {
     Surface(
         modifier = modifier,
@@ -237,17 +122,27 @@ fun HistoryLayout2(
         Column(modifier = modifier)
         {
             BackHeader(title = stringResource(R.string.history), upButton = upButton)
+            OutlinedTextField(
+                value = filter,
+                onValueChange = { if (filterChange != null) filterChange(it) },
+                label = { Text(stringResource(R.string.filter_title)) },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search)
+            )
             val practiceGroups = mutableMapOf<Long, MutableList<ProtoPracticeResult>>()
             val secsInDay = 60 * 60 * 24
 
+            val names = stringArrayResource(R.array.exercise_name)
             for (practice in practices) {
                 val key = (practice.endDate.seconds / secsInDay) * secsInDay
-                if (!practiceGroups.contains(key))
-                {
-                    practiceGroups[key] = mutableListOf()
+                if (names[practice.id].contains(filter, true)) {
+                    if (!practiceGroups.contains(key)) {
+                        practiceGroups[key] = mutableListOf()
+                    }
+                    practiceGroups[key]?.add(practice)
                 }
-                practiceGroups[key]?.add(practice)
-                Log.d("secs", practice.total.toString())
             }
 
             val dates = mutableListOf<String>()
@@ -267,7 +162,7 @@ fun HistoryLayout2(
                 modifier = modifier
             ) {
                 itemsIndexed(results) { index, item ->
-                    HistoryCard2(
+                    HistoryCard(
                         results = item,
                         date = dates[index]
                     )
@@ -281,6 +176,9 @@ fun HistoryLayout2(
 @Composable
 fun HistoryLayoutPreview() {
     BreatheTheme {
-        HistoryLayout(Modifier.fillMaxSize())
+        HistoryLayout(
+            listOf(),
+            Modifier.fillMaxSize()
+        )
     }
 }
