@@ -9,22 +9,22 @@ import dagger.hilt.components.SingletonComponent
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+private val Context.settingsDataStore by dataStore(
+    fileName = "settings.pb",
+    serializer = NotificationSettingsSerializer
+)
+private val Context.practiceResultDataStore by dataStore(
+    fileName = "practices_result.pb",
+    serializer = PracticeResultListSerializer
+)
+private val Context.profileDataStore by dataStore(
+    fileName = "profile.pb",
+    serializer = ProfileSerializer
+)
+
 @Module
 @InstallIn(SingletonComponent::class)
 class DataManager(val context: Context) {
-
-    private val Context.settingsDataStore by dataStore(
-        fileName = "settings.pb",
-        serializer = NotificationSettingsSerializer
-    )
-    private val Context.practiceResultDataStore by dataStore(
-        fileName = "practices_result.pb",
-        serializer = PracticeResultListSerializer
-    )
-    private val Context.profileDataStore by dataStore(
-        fileName = "profile.pb",
-        serializer = ProfileSerializer
-    )
 
     suspend fun setEnabled(value: Boolean) = context.settingsDataStore.updateData {
         it.toBuilder().setEnabled(value).build()
@@ -34,14 +34,6 @@ class DataManager(val context: Context) {
     }
     suspend fun setTimeMinutes(value: Int) = context.settingsDataStore.updateData {
         it.toBuilder().setTimeMinutes(value).build()
-    }
-    suspend fun setAchievementState(index: Int, state: Boolean) = context.profileDataStore.updateData {
-        it.toBuilder().setAchievements(
-            index,
-            it.getAchievements(index).copy {
-                active = state
-            }
-        ).build()
     }
 
     suspend fun setAchievements(achievements: List<ProtoAchievement>) = context.profileDataStore.updateData {

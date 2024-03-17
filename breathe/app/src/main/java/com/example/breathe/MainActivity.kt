@@ -188,12 +188,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                createNotificationChannel(applicationContext)
-            }
-        }
+        val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
+        createNotificationChannel(applicationContext)
         val viewModel = BreatheViewModel(
             MediaPlayer.create(this, R.raw.vot_tak_vot),
             AccelerometerHandler(this),
