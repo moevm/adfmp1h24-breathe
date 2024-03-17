@@ -1,5 +1,6 @@
 package com.example.breathe
 
+import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,6 +62,7 @@ data class BreatheFilterState(
 
 @HiltViewModel
 class BreatheViewModel @Inject constructor(
+    private val mediaPlayer : MediaPlayer,
     private val accelerometer: AccelerometerHandler,
     private val dataManager: DataManager
 ) : ViewModel() {
@@ -263,6 +265,7 @@ class BreatheViewModel @Inject constructor(
     }
 
     private fun indicateSuccess() {
-
+        mediaPlayer.start()
+        accelerometer.vibrate()
     }
 }

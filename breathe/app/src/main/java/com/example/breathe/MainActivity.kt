@@ -1,5 +1,6 @@
 package com.example.breathe
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -178,6 +179,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val viewModel = BreatheViewModel(
+            MediaPlayer.create(this, R.raw.vot_tak_vot),
             AccelerometerHandler(this),
             DataManager(applicationContext)
         )
