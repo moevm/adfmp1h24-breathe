@@ -59,12 +59,6 @@ data class BreatheFilterState(
     }
 }
 
-enum class PhaseType {
-    BreatheIn,
-    BreatheOut,
-    BreatheHold
-}
-
 @HiltViewModel
 class BreatheViewModel @Inject constructor(
     private val accelerometer: AccelerometerHandler,
@@ -82,8 +76,10 @@ class BreatheViewModel @Inject constructor(
     val resultsFlow: Flow<ProtoPracticeResultList>      = _resultsFlow
     val profileFlow: Flow<ProtoProfile>                 = _profileFlow
 
-    private var prevAccelerationZ : Float = 0f
-    private var currPhase : PhaseType = PhaseType.BreatheHold
+    private var defaultAccelerationZ : Float = 0.0f
+    private var currPhaseNum: Int = 3
+    private var phaseRepeats: IntArray= IntArray(4)
+    private var currPhaseTimes: IntArray= IntArray(4)
 
     init {
         reset()
@@ -91,6 +87,10 @@ class BreatheViewModel @Inject constructor(
 
     private fun reset() {
         accelerometer.unregister()
+        defaultAccelerationZ = 0.0f
+        currPhaseNum = 3
+        phaseRepeats = IntArray(4)
+        currPhaseTimes = IntArray(4)
         _practiceState.value = BreathePracticeState()
         _filterState.value = BreatheFilterState()
     }
@@ -191,6 +191,12 @@ class BreatheViewModel @Inject constructor(
 
     fun timerEnd(id: Int, state: BreathePracticeState) {
         accelerometer.unregister()
+        var modifier = 1.0f
+        for (i in 0..<4) {
+            state.currentPhaseTimes[i] = currPhaseTimes[i] / phaseRepeats[i]
+            modifier *= 1.0f - (abs(state.currentPhaseTimes[i] - state.phaseTimes[i])
+                    / state.phaseTimes[i].toFloat()).coerceIn(0.0f, 1.0f)
+        }
         addPracticeResult(
             id,
             state.totalSeconds,
@@ -198,11 +204,6 @@ class BreatheViewModel @Inject constructor(
             state.phaseTimes,
             state.currentPhaseTimes
         )
-        var modifier = 1.0f
-        for (i in 0..<4) {
-             modifier *= 1.0f - (abs(state.currentPhaseTimes[i] - state.phaseTimes[i])
-                    / state.phaseTimes[i].toFloat()).coerceIn(0.0f, 1.0f)
-        }
         appendScore(
             (200 * modifier * (state.totalSeconds - state.currentSeconds) / state.totalSeconds.toFloat()).toInt()
         )
@@ -221,23 +222,33 @@ class BreatheViewModel @Inject constructor(
             if (waitSeconds == 1) {     // перед самим стартом упражнения
                 accelerometer.unregister()
                 accelerometer.register()
-                currPhase = PhaseType.BreatheHold
-                prevAccelerationZ = accelerometer.data
+                currPhaseNum = 3
+                defaultAccelerationZ = accelerometer.data
+                phaseRepeats = IntArray(4)
+                currPhaseTimes = IntArray(4)
             }
             return
         }
         val newSeconds = currentSeconds - 1
         val currAccelerationZ = accelerometer.data
-        val prevPhase = currPhase
-        if (currAccelerationZ > prevAccelerationZ) {
-            currPhase = PhaseType.BreatheIn
+        val prevPhaseNum = currPhaseNum
+        if (currAccelerationZ > defaultAccelerationZ) {
+            currPhaseNum = 1    // вдох
         }
-        else if (currAccelerationZ < prevAccelerationZ)
+        else if (currAccelerationZ < defaultAccelerationZ)
         {
-            currPhase = PhaseType.BreatheOut
+            currPhaseNum = 3    // выдох
         }
-        else {
-            currPhase = PhaseType.BreatheHold
+        else if (prevPhaseNum == 1) {
+            currPhaseNum = 2    // удержание после вдоха
+        }
+        else if (prevPhaseNum == 3) {
+            currPhaseNum = 0    // удержание после выдоха или начальное
+        }
+
+        currPhaseTimes[currPhaseNum] += 1
+        if (prevPhaseNum != currPhaseNum) {
+            phaseRepeats[currPhaseNum] += 1
         }
 
         _practiceState.update { currentState ->
