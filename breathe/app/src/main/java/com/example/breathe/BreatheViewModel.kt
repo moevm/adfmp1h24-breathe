@@ -59,6 +59,12 @@ data class BreatheFilterState(
     }
 }
 
+enum class PhaseType {
+    BreatheIn,
+    BreatheOut,
+    BreatheHold
+}
+
 @HiltViewModel
 class BreatheViewModel @Inject constructor(
     private val accelerometer: AccelerometerHandler,
@@ -75,6 +81,10 @@ class BreatheViewModel @Inject constructor(
     val settingsFlow: Flow<ProtoNotificationSettings>   = _settingsFlow
     val resultsFlow: Flow<ProtoPracticeResultList>      = _resultsFlow
     val profileFlow: Flow<ProtoProfile>                 = _profileFlow
+
+    private var prevAccelerationZ : Float = 0f
+    private var currPhase : PhaseType = PhaseType.BreatheHold
+
     init {
         reset()
     }
@@ -199,7 +209,8 @@ class BreatheViewModel @Inject constructor(
     }
 
     fun timerTick() {
-        if (_practiceState.value.currentSeconds <= 0) {
+        val currentSeconds = _practiceState.value.currentSeconds
+        if (currentSeconds <= 0) {
             return
         }
         val waitSeconds = _practiceState.value.waitSeconds
@@ -207,14 +218,27 @@ class BreatheViewModel @Inject constructor(
             _practiceState.update { currentState ->
                 currentState.copy(waitSeconds = waitSeconds - 1)
             }
-            if (waitSeconds == 1) {
+            if (waitSeconds == 1) {     // перед самим стартом упражнения
                 accelerometer.unregister()
                 accelerometer.register()
+                currPhase = PhaseType.BreatheHold
+                prevAccelerationZ = accelerometer.data
             }
             return
         }
-        val newSeconds = _practiceState.value.currentSeconds - 1
-
+        val newSeconds = currentSeconds - 1
+        val currAccelerationZ = accelerometer.data
+        val prevPhase = currPhase
+        if (currAccelerationZ > prevAccelerationZ) {
+            currPhase = PhaseType.BreatheIn
+        }
+        else if (currAccelerationZ < prevAccelerationZ)
+        {
+            currPhase = PhaseType.BreatheOut
+        }
+        else {
+            currPhase = PhaseType.BreatheHold
+        }
 
         _practiceState.update { currentState ->
             currentState.copy(currentSeconds = newSeconds)
