@@ -1,6 +1,7 @@
 package com.example.breathe
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -65,7 +67,8 @@ data class BreatheFilterState(
 class BreatheViewModel @Inject constructor(
     private val mediaPlayer : MediaPlayer,
     private val accelerometer: AccelerometerHandler,
-    private val dataManager: DataManager
+    private val dataManager: DataManager,
+    private val checkPermissions: (() -> Unit)
 ) : ViewModel() {
     private val _practiceState  = MutableStateFlow(BreathePracticeState())
     private val _filterState    = MutableStateFlow(BreatheFilterState())
@@ -119,7 +122,6 @@ class BreatheViewModel @Inject constructor(
         val title = _resources.getString(R.string.notification_title)
         val text  = _resources.getString(R.string.notification_text)
         if (data.enabled) {
-            checkNotifications(dataManager.context)
             val interval = (60 * data.timeHours + data.timeMinutes) * 1000.toLong()
             scheduleNotification(dataManager.context, interval, title, text)
         } else {
@@ -128,8 +130,11 @@ class BreatheViewModel @Inject constructor(
     }
 
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
-        dataManager.setEnabled(value)
-        updateNotifications()
+        if (value) {
+            checkPermissions()
+            dataManager.setEnabled(value)
+            updateNotifications()
+        }
     }
 
     fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
@@ -228,7 +233,6 @@ class BreatheViewModel @Inject constructor(
         }
         dataManager.setUsage(daysUsage, currentUsage)
         checkAchievements(daysUsage)
-        Log.d("achievement", "updating")
     }
 
     private fun appendScore(appendValue: Int) = viewModelScope.launch {

@@ -38,13 +38,6 @@ fun createNotificationChannel(context: Context) {
     manager.createNotificationChannel(channel)
 }
 
-fun checkNotifications(context: Context) {
-    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    if (manager.areNotificationsEnabled()) {
-
-    }
-}
-
 fun scheduleNotification(context: Context, interval: Long, title: String?, text: String?) {
     val intent = Intent(context, NotificationReceiver::class.java)
     intent.putExtra("title", title)
