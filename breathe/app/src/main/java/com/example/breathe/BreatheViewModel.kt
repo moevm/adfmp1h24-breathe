@@ -1,6 +1,7 @@
 package com.example.breathe
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,8 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -64,7 +67,8 @@ data class BreatheFilterState(
 class BreatheViewModel @Inject constructor(
     private val mediaPlayer : MediaPlayer,
     private val accelerometer: AccelerometerHandler,
-    private val dataManager: DataManager
+    private val dataManager: DataManager,
+    private val checkPermissions: (() -> Unit)
 ) : ViewModel() {
     private val _practiceState  = MutableStateFlow(BreathePracticeState())
     private val _filterState    = MutableStateFlow(BreatheFilterState())
@@ -78,11 +82,25 @@ class BreatheViewModel @Inject constructor(
     val resultsFlow: Flow<ProtoPracticeResultList>      = _resultsFlow
     val profileFlow: Flow<ProtoProfile>                 = _profileFlow
 
+
+    private val _resources = dataManager.context.resources
+    private val _achievementNames = _resources.getStringArray(R.array.achievements_list)
+    private val _achievementsCondition = mapOf(
+        _achievementNames[0] to 1,
+        _achievementNames[1] to 7,
+        _achievementNames[2] to 14,
+        _achievementNames[3] to 21,
+        _achievementNames[4] to 30,
+        _achievementNames[5] to 6 * 30,
+        _achievementNames[6] to 365
+    )
+
     private var defaultAccelerationZ : Float = 0.0f
     private var currPhaseNum: Int = 0
     private var currPhaseDur: Int = 0
     private var phaseRepeats: IntArray= IntArray(4)
     private var currPhaseTimes: IntArray= IntArray(4)
+
 
     init {
         reset()
@@ -99,16 +117,34 @@ class BreatheViewModel @Inject constructor(
         _filterState.value = BreatheFilterState()
     }
 
+    private fun updateNotifications() = viewModelScope.launch {
+        val data  = _settingsFlow.first()
+        val title = _resources.getString(R.string.notification_title)
+        val text  = _resources.getString(R.string.notification_text)
+        if (data.enabled) {
+            val interval = (60 * data.timeHours + data.timeMinutes) * 1000.toLong()
+            scheduleNotification(dataManager.context, interval, title, text)
+        } else {
+            cancelNotification(dataManager.context, title, text)
+        }
+    }
+
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
-        dataManager.setEnabled(value)
+        if (value) {
+            checkPermissions()
+            dataManager.setEnabled(value)
+            updateNotifications()
+        }
     }
 
     fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
         dataManager.setTimeHours(value)
+        updateNotifications()
     }
 
     fun saveNotifyTimeMinutes(value: Int) = viewModelScope.launch {
         dataManager.setTimeMinutes(value)
+        updateNotifications()
     }
 
     fun setSettingsState(seconds: Int, phaseTimes: IntArray) {
@@ -158,22 +194,45 @@ class BreatheViewModel @Inject constructor(
         }
     }
 
+    private fun checkAchievements(days: Int) = viewModelScope.launch {
+        val achievementsList = mutableListOf<ProtoAchievement>()
+        for (achievement in _resources.getStringArray(R.array.achievements_list)) {
+            val protoAchievement = profileFlow.first().achievementsList.find {
+                it.name == achievement
+            }
+            achievementsList.add(
+                ProtoAchievement
+                    .getDefaultInstance()
+                    .toBuilder()
+                    .setName(achievement)
+                    .setActive(
+                        (protoAchievement?.active ?: false)
+                        || days >= (_achievementsCondition[achievement] ?: 0)
+                    )
+                    .build()
+            )
+        }
+        dataManager.setAchievements(achievementsList)
+    }
+
     private fun updateUsage() = viewModelScope.launch {
         val secondsInDay: Long = 60 * 60 * 24
         val currentUsage = (System.currentTimeMillis() / 1000)
 
-        var daysUsage = 0
-        profileFlow.collect { daysUsage = it.daysUsingInRow }
-
-        var lastUsage: Long = 0
-        profileFlow.collect { lastUsage = it.lastUsage.seconds }
+        val data = profileFlow.first()
+        var daysUsage = data.daysUsingInRow
+        val lastUsage = data.lastUsage.seconds
+        val daysDiff = (currentUsage / secondsInDay) - (lastUsage / secondsInDay)
 
         /// Вход на следующий день
-        if ((lastUsage / secondsInDay) == (currentUsage / secondsInDay - 1)) {
-            profileFlow.collect { daysUsage += 1 }
+        if (daysDiff == 1.toLong()) {
+            daysUsage += 1
             dataManager.appendScore(100)
+        } else if (daysDiff > 1.toLong()) {
+            daysUsage = 0
         }
-        dataManager.setUsage( daysUsage, currentUsage )
+        dataManager.setUsage(daysUsage, currentUsage)
+        checkAchievements(daysUsage)
     }
 
     private fun appendScore(appendValue: Int) = viewModelScope.launch {
