@@ -130,9 +130,9 @@ class BreatheViewModel @Inject constructor(
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
         if (value) {
             checkPermissions()
-            dataManager.setEnabled(true)
-            updateNotifications()
         }
+        dataManager.setEnabled(value)
+        updateNotifications()
     }
 
     fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {
