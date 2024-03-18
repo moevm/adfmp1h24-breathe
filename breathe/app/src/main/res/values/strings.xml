@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Nevsky Breathe</string>
+    <!--string name="app_name">Nevsky Breathe</string-->
+    <string name="app_name">adfmp1h24-breathe</string>
 
     <string-array name="exercise_name">
         <item>Дыхание животом</item>
