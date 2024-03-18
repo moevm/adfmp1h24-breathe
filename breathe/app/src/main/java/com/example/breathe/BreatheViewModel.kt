@@ -1,7 +1,6 @@
 package com.example.breathe
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -132,9 +130,9 @@ class BreatheViewModel @Inject constructor(
     fun saveNotifications(value: Boolean) = viewModelScope.launch {
         if (value) {
             checkPermissions()
-            dataManager.setEnabled(value)
-            updateNotifications()
         }
+        dataManager.setEnabled(value)
+        updateNotifications()
     }
 
     fun saveNotifyTimeHours(value: Int) = viewModelScope.launch {

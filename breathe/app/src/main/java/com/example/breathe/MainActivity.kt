@@ -127,11 +127,7 @@ fun BreatheApp(
                 TrainingResultLayout(
                     practiceNum = it,
                     state = practiceState,
-                    mainScreenButton = {
-                        navController.navigate(BreatheScreen.PracticesList.name) {
-                            popUpTo(BreatheScreen.PracticesList.name)
-                        }
-                    }
+                    mainScreenButton = { navController.popBackStack() }
                 )
             }
         }
