@@ -43,7 +43,6 @@ fun TrainingLayout(
     onTimerEnd: (()->Unit)?=null,
     stopButton: (()->Unit)? = null
 ) {
-    currentPracticeState.reset()
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
