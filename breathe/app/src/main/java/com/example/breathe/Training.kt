@@ -27,6 +27,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +43,7 @@ fun TrainingLayout(
     onTimerEnd: (()->Unit)?=null,
     stopButton: (()->Unit)? = null
 ) {
+    currentPracticeState.reset()
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -112,10 +114,20 @@ fun TrainingTimer(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (waitSeconds == 0) {
-                TimerDisplay(minutes, stringResource(R.string.min))
-                TimerDisplay(seconds, stringResource(R.string.sec))
-            }
-            else {
+                if (minutes > 0) {
+                    TimerDisplay(minutes, stringResource(R.string.min))
+                    TimerDisplay(seconds, stringResource(R.string.sec))
+                } else {
+                    TimerDisplay(seconds, stringResource(R.string.sec))
+                }
+            } else {
+                Text(
+                    text="Начало через",
+                    color = MaterialTheme.colorScheme.secondary,
+                    fontSize = 28.sp,
+                    modifier = modifier,
+                    textAlign = TextAlign.Center
+                )
                 TimerDisplay(waitSeconds, stringResource(R.string.sec))
             }
         }

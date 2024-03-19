@@ -69,15 +69,29 @@ fun HistoryCard(
                 .padding(15.dp, 10.dp, 15.dp, 5.dp)
         ) {
             items(results.size) {
-                Row {
-                    Icon(
-                        Icons.Outlined.Star,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.scale(0.5F)
-                    )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row {
+                        Icon(
+                            Icons.Outlined.Star,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.scale(0.5F)
+                        )
+                        Text(
+                            text = stringArrayResource(R.array.exercise_name)[results[it].id]
+                        )
+                    }
+                    val startTime = (results[it].endDate.seconds - results[it].resTotal) * 1000L
                     Text(
-                        text = stringArrayResource(R.array.exercise_name)[results[it].id]
+                        text = "| "
+                                + SimpleDateFormat("hh", Locale.ENGLISH).format(startTime)
+                                + " " + stringResource(id = R.string.hrs) + " "
+                                + SimpleDateFormat("mm", Locale.ENGLISH).format(startTime)
+                                + " " + stringResource(id = R.string.min),
+                        modifier = Modifier
                     )
                 }
             }
