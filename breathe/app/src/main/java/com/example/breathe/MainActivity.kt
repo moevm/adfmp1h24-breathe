@@ -88,6 +88,7 @@ fun BreatheApp(
                     infoButton = { num -> navController.navigate(
                         BreatheScreen.PracticeInfo.name + "/$num") },
                     startButton = { num ->
+                        viewModel.resetPracticeState()
                         navController.navigate(BreatheScreen.Training.name + "/$num") {
                             popUpTo(BreatheScreen.PracticesList.name)
                         } },
@@ -164,6 +165,7 @@ fun BreatheApp(
                     practiceNum = it,
                     currentPracticeState = practiceState,
                     startButton = { num ->
+                        viewModel.resetPracticeState()
                         navController.navigate(BreatheScreen.Training.name + "/$num") },
                     upButton = { navController.navigateUp() }
                 )

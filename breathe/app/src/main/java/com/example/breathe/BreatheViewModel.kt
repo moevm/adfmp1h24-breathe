@@ -115,6 +115,22 @@ class BreatheViewModel @Inject constructor(
         _filterState.value = BreatheFilterState()
     }
 
+    fun resetPracticeState() {
+        _practiceState.update { currentState ->
+            currentState.copy(
+                waitSeconds = 5,
+                currentSeconds = currentState.totalSeconds,
+                currentPhaseTimes = IntArray(4)
+            )
+        }
+        accelerometer.unregister()
+        defaultAccelerationZ = 0.0f
+        currPhaseNum = 0
+        currPhaseDur = 0
+        phaseRepeats = IntArray(4)
+        currPhaseTimes = IntArray(4)
+    }
+
     private fun updateNotifications() = viewModelScope.launch {
         val data  = _settingsFlow.first()
         val title = _resources.getString(R.string.notification_title)
